@@ -25,8 +25,8 @@ class Solution(object):
         :rtype: List[int]
         """
         # use a value: index mapping of nums to return the index pair if target - num exists and isnt the same index (or None if it doesnt)
-        num_indices = {num: i for i, num in enumerate(nums)}
-        return next(([i, num_indices[target - num]] for i, num in enumerate(nums) if target - num in num_indices and i != num_indices[target - num]), None)
+        numIndices = {num: i for i, num in enumerate(nums)}
+        return next(([i, numIndices[target - num]] for i, num in enumerate(nums) if target - num in numIndices and i != numIndices[target - num]), None)
     # https://leetcode.com/problems/group-anagrams/
     def groupAnagrams(self, strs):
         """
@@ -49,3 +49,18 @@ class Solution(object):
         # create a num: numCount dict then reverse sort it off its values to a k-long slice
         frequency = {frequency.get(num, 0) + 1 for num in nums}
         return sorted(frequency, key=frequency.get, reverse=True)[:k]
+    # https://leetcode.com/problems/product-of-array-except-self/
+    def productExceptSelf(self, nums):
+        """
+        :type nums: List[int]
+        :rtype: List[int]
+        """
+        # multiply the cross-running product from the left and right of nums into the respective output crossing indices
+        n = len(nums)
+        output, leftProduct, rightProduct = [1] * n, 1, 1
+        for i in range(n):
+            output[i] *= leftProduct
+            leftProduct *= nums[i]
+            output[~i] *= rightProduct
+            rightProduct *= nums[~i]
+        return output
