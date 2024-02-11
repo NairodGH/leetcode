@@ -27,3 +27,18 @@ class Solution(object):
         # use a value: index mapping of nums to return the index pair if target - num exists and isnt the same index (or None if it doesnt)
         num_indices = {num: i for i, num in enumerate(nums)}
         return next(([i, num_indices[target - num]] for i, num in enumerate(nums) if target - num in num_indices and i != num_indices[target - num]), None)
+    # https://leetcode.com/problems/group-anagrams/
+    def groupAnagrams(self, strs):
+        """
+        :type strs: List[str]
+        :rtype: List[List[str]]
+        """
+        # put each str into the sorted str key's (see isAnagram) array value then return the dictionnary as a list
+        anagrams = {}
+        for str in strs:
+            sortedStr = ''.join(sorted(str))
+            if sortedStr in anagrams:
+                anagrams[sortedStr].append(str)
+            else:
+                anagrams[sortedStr] = [str]
+        return list(anagrams.values())
