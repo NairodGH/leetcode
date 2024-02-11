@@ -37,8 +37,15 @@ class Solution(object):
         anagrams = {}
         for str in strs:
             sortedStr = ''.join(sorted(str))
-            if sortedStr in anagrams:
-                anagrams[sortedStr].append(str)
-            else:
-                anagrams[sortedStr] = [str]
+            anagrams[sortedStr] = anagrams.get(sortedStr, []) + [str]
         return list(anagrams.values())
+    # https://leetcode.com/problems/top-k-frequent-elements/
+    def topKFrequent(self, nums, k):
+        """
+        :type nums: List[int]
+        :type k: int
+        :rtype: List[int]
+        """
+        # create a num: numCount dict then reverse sort it off its values to a k-long slice
+        frequency = {frequency.get(num, 0) + 1 for num in nums}
+        return sorted(frequency, key=frequency.get, reverse=True)[:k]
