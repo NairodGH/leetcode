@@ -84,3 +84,10 @@ class Solution(object):
                 rows[i].add(board[i][j])
                 boxes[(i // 3) * 3 + j // 3].add(board[i][j])
         return True
+    # https://neetcode.io/problems/string-encode-and-decode
+    def encode(self, strs):
+        # combine all the strings into one while adding a \x00 separator after each
+        return "".join([s + '\x00' for s in strs])
+    def decode(self, s):
+        # split the string based on the separators (remove the excessive last one)
+        return s.split('\x00')[:-1]
