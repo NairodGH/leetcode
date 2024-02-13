@@ -25,8 +25,8 @@ class Solution(object):
         :rtype: List[int]
         """
         # use a value: index mapping of nums to return the index pair if target - num exists and isnt the same index (or None if it doesnt)
-        numIndices = {num: i for i, num in enumerate(nums)}
-        return next(([i, numIndices[target - num]] for i, num in enumerate(nums) if target - num in numIndices and i != numIndices[target - num]), None)
+        num_indices = {num: i for i, num in enumerate(nums)}
+        return next(([i, num_indices[target - num]] for i, num in enumerate(nums) if target - num in num_indices and i != num_indices[target - num]), None)
     # https://leetcode.com/problems/group-anagrams/
     def groupAnagrams(self, strs):
         """
@@ -36,8 +36,8 @@ class Solution(object):
         # put each str into the sorted str key's (see isAnagram) array value then return the dictionnary as a list
         anagrams = {}
         for str in strs:
-            sortedStr = ''.join(sorted(str))
-            anagrams[sortedStr] = anagrams.get(sortedStr, []) + [str]
+            sorted_str = ''.join(sorted(str))
+            anagrams[sorted_str] = anagrams.get(sorted_str, []) + [str]
         return list(anagrams.values())
     # https://leetcode.com/problems/top-k-frequent-elements/
     def topKFrequent(self, nums, k):
@@ -57,11 +57,11 @@ class Solution(object):
         """
         # multiply the cross-running product from the left and right of nums into the respective output crossing indices
         n = len(nums)
-        output, leftProduct, rightProduct = [1] * n, 1, 1
+        output, left_product, right_product = [1] * n, 1, 1
         for i in range(n):
-            output[i] *= leftProduct
-            leftProduct *= nums[i]
-            output[~i] *= rightProduct
+            output[i] *= left_product
+            left_product *= nums[i]
+            output[~i] *= right_product
             rightProduct *= nums[~i]
         return output
     # https://leetcode.com/problems/valid-sudoku/
@@ -71,9 +71,7 @@ class Solution(object):
         :rtype: bool
         """
         # using sets for each zones to verify, parse board into them to return False if there's any duplicates
-        lines = [set() for _ in range(9)]
-        rows = [set() for _ in range(9)]
-        boxes = [set() for _ in range(9)]
+        lines, rows, boxes = [set() for _ in range(9)], [set() for _ in range(9)], [set() for _ in range(9)]
         for i in range(9):
             for j in range(9):
                 if board[i][j] == '.':
