@@ -91,3 +91,18 @@ class Solution(object):
     def decode(self, s):
         # split the string based on the separators (remove the excessive last one)
         return s.split('\x00')[:-1]
+    # https://leetcode.com/problems/longest-consecutive-sequence
+    def longestConsecutive(self, nums):
+        """
+        :type nums: List[int]
+        :rtype: int
+        """
+        # iterate over a nums set and its sequences to find the longest streak (couldn't use sort since O(n log n))
+        nums, longest_streak = set(nums), 0
+        for num in nums:
+            if num - 1 not in nums:
+                current_num = num
+                while current_num + 1 in nums:
+                    current_num += 1
+                longest_streak = max(longest_streak, current_num - num + 1)
+        return longest_streak
