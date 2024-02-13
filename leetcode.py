@@ -1,5 +1,5 @@
 class Solution(object):
-    # https://leetcode.com/problems/contains-duplicate/description/
+    # https://leetcode.com/problems/contains-duplicate
     def containsDuplicate(self, nums):
         """
         :type nums: List[int]
@@ -17,7 +17,7 @@ class Solution(object):
         """
         # since anagrams are same length + same letter frequencies, just check if both strings are equal when ascii-sorted 
         return sorted(s) == sorted(t)
-    # https://leetcode.com/problems/two-sum/description/
+    # https://leetcode.com/problems/two-sum
     def twoSum(self, nums, target):
         """
         :type nums: List[int]
@@ -104,3 +104,12 @@ class Solution(object):
                     current_num += 1
                 longest_streak = max(longest_streak, current_num - num + 1)
         return longest_streak
+    # https://leetcode.com/problems/valid-palindrome
+    def isPalindrome(self, s):
+        """
+        :type s: str
+        :rtype: bool
+        """
+        # get the string without non-alphanumerical characters and to lowercase then compare it with its reversed version
+        formatted_str = ''.join([char for char in s if char.isalnum()]).lower()
+        return formatted_str == formatted_str[::-1]
