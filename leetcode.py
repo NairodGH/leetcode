@@ -64,3 +64,23 @@ class Solution(object):
             output[~i] *= rightProduct
             rightProduct *= nums[~i]
         return output
+    # https://leetcode.com/problems/valid-sudoku/
+    def isValidSudoku(self, board):
+        """
+        :type board: List[List[str]]
+        :rtype: bool
+        """
+        # using sets for each zones to verify, parse board into them to return False if there's any duplicates
+        lines = [set() for _ in range(9)]
+        rows = [set() for _ in range(9)]
+        boxes = [set() for _ in range(9)]
+        for i in range(9):
+            for j in range(9):
+                if board[i][j] == '.':
+                    continue
+                if board[i][j] in lines[j] or board[i][j] in rows[i] or board[i][j] in boxes[(i // 3) * 3 + j // 3]:
+                    return False
+                lines[j].add(board[i][j])
+                rows[i].add(board[i][j])
+                boxes[(i // 3) * 3 + j // 3].add(board[i][j])
+        return True
