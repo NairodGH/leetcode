@@ -1,4 +1,9 @@
 class Solution(object):
+
+    # https://neetcode.io/roadmap
+
+    # Arrays & Hashing
+
     # https://leetcode.com/problems/contains-duplicate
     def containsDuplicate(self, nums):
         """
@@ -74,10 +79,8 @@ class Solution(object):
         lines, rows, boxes = [set() for _ in range(9)], [set() for _ in range(9)], [set() for _ in range(9)]
         for i in range(9):
             for j in range(9):
-                if board[i][j] == '.':
-                    continue
-                if board[i][j] in lines[j] or board[i][j] in rows[i] or board[i][j] in boxes[(i // 3) * 3 + j // 3]:
-                    return False
+                if board[i][j] == '.': continue
+                if board[i][j] in lines[j] or board[i][j] in rows[i] or board[i][j] in boxes[(i // 3) * 3 + j // 3]: return False
                 lines[j].add(board[i][j])
                 rows[i].add(board[i][j])
                 boxes[(i // 3) * 3 + j // 3].add(board[i][j])
@@ -100,16 +103,31 @@ class Solution(object):
         for num in nums:
             if num - 1 not in nums:
                 current_num = num
-                while current_num + 1 in nums:
-                    current_num += 1
+                while current_num + 1 in nums: current_num += 1
                 longest_streak = max(longest_streak, current_num - num + 1)
         return longest_streak
     # https://leetcode.com/problems/valid-palindrome
+
+    # Two Pointers
+
     def isPalindrome(self, s):
         """
         :type s: str
         :rtype: bool
         """
-        # get the string without non-alphanumerical characters and to lowercase then compare it with its reversed version
+        # get the alphanumerical + lowercase string then compare each character with its mirrored equivalent
         formatted_str = ''.join([char for char in s if char.isalnum()]).lower()
-        return formatted_str == formatted_str[::-1]
+        return all([formatted_str[i] == formatted_str[-(i + 1)] for i in range(len(formatted_str) // 2)])
+    # https://leetcode.com/problems/two-sum-ii-input-array-is-sorted/
+    def twoSum(self, numbers, target):
+        """
+        :type numbers: List[int]
+        :type target: int
+        :rtype: List[int]
+        """
+        # create 2 pointers at the start/end and move each toward the other based on the sum result until it's found
+        left, right = 0, len(numbers) - 1
+        while left < right:
+            sum = numbers[left] + numbers[right]
+            if sum == target: return [left + 1, right + 1]
+            left, right = left + (sum < target), right - (sum > target)
