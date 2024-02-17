@@ -131,3 +131,30 @@ class Solution(object):
             sum = numbers[left] + numbers[right]
             if sum == target: return [left + 1, right + 1]
             left, right = left + (sum < target), right - (sum > target)
+    # https://leetcode.com/problems/3sum/
+    def threeSum(self, nums):
+        """
+        :type nums: List[int]
+        :rtype: List[List[int]]
+        """
+        # using a sort (for 2-pointer), replicate twoSum but with an extra fixed value and anti-duplicate checks
+        nums.sort()
+        size, result, i = len(nums), [], 0
+        while i < size:
+            if i > 0 and nums[i] == nums[i-1]:
+                i += 1
+                continue
+            left, right = i + 1, size - 1
+            while left < right:
+                sum = nums[i] + nums[left] + nums[right]
+                if sum == 0:
+                    result.append([nums[i], nums[left], nums[right]])
+                    while left < right and nums[left] == nums[left+1]:
+                        left += 1
+                    while left < right and nums[right] == nums[right-1]:
+                        right -= 1
+                    left, right = left + 1, right - 1
+                else:
+                    left, right = left + (sum < 0), right - (sum > 0)
+            i += 1
+        return result
