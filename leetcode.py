@@ -10,9 +10,8 @@ class Solution(object):
         :type nums: List[int]
         :rtype: bool
         """
-        # use set()'s unique values property to check for duplicates
-        seen = set()
-        return any(num in seen or seen.add(num) for num in nums)
+        # use set()'s unique values property to check for duplicates by comparing the length
+        return len(nums) > len(set(nums))
     # https://leetcode.com/problems/valid-anagram/
     def isAnagram(self, s, t):
         """
@@ -20,8 +19,13 @@ class Solution(object):
         :type t: str
         :rtype: bool
         """
-        # since anagrams are same length + same letter frequencies, just check if both strings are equal when ascii-sorted 
-        return sorted(s) == sorted(t)
+        # check if both strings have the same length and letter frequency with a set
+        if len(s) != len(t):
+            return False
+        for char in set(s):
+            if s.count(char) != t.count(char):
+                return False
+        return True
     # https://leetcode.com/problems/two-sum
     def twoSum(self, nums, target):
         """
@@ -42,7 +46,8 @@ class Solution(object):
         anagrams = {}
         for str in strs:
             sorted_str = ''.join(sorted(str))
-            anagrams[sorted_str] = anagrams.get(sorted_str, []) + [str]
+            if sorted_str in anagrams: anagrams[sorted_str].append(str)
+            else: anagrams[sorted_str] = [str]
         return list(anagrams.values())
     # https://leetcode.com/problems/top-k-frequent-elements/
     def topKFrequent(self, nums, k):
@@ -52,7 +57,9 @@ class Solution(object):
         :rtype: List[int]
         """
         # create a num: numCount dict then reverse sort it off its values to a k-long slice
-        frequency = {frequency.get(num, 0) + 1 for num in nums}
+        frequency = {}
+        for num in nums:
+            frequency[num] = frequency.get(num, 0) + 1
         return sorted(frequency, key=frequency.get, reverse=True)[:k]
     # https://leetcode.com/problems/product-of-array-except-self/
     def productExceptSelf(self, nums):
@@ -67,7 +74,7 @@ class Solution(object):
             output[i] *= left_product
             left_product *= nums[i]
             output[~i] *= right_product
-            rightProduct *= nums[~i]
+            right_product *= nums[~i]
         return output
     # https://leetcode.com/problems/valid-sudoku/
     def isValidSudoku(self, board):
@@ -75,15 +82,18 @@ class Solution(object):
         :type board: List[List[str]]
         :rtype: bool
         """
-        # using sets for each zones to verify, parse board into them to return False if there's any duplicates
-        lines, rows, boxes = [set() for _ in range(9)], [set() for _ in range(9)], [set() for _ in range(9)]
+        # using lists for each zones to verify, parse board into them to return False if there's any duplicates
+        rows, lines, boxes = [[] for _ in range(9)], [[] for _ in range(9)], [[] for _ in range(9)]
         for i in range(9):
+            k = (i // 3) * 3
             for j in range(9):
                 if board[i][j] == '.': continue
-                if board[i][j] in lines[j] or board[i][j] in rows[i] or board[i][j] in boxes[(i // 3) * 3 + j // 3]: return False
-                lines[j].add(board[i][j])
-                rows[i].add(board[i][j])
-                boxes[(i // 3) * 3 + j // 3].add(board[i][j])
+                if board[i][j] in rows[i] or board[i][j] in lines[j]: return False
+                curr_k = k + (j // 3)
+                if board[i][j] in boxes[curr_k]: return False
+                rows[i].append(board[i][j])
+                lines[j].append(board[i][j])
+                boxes[curr_k].append(board[i][j])
         return True
     # https://neetcode.io/problems/string-encode-and-decode
     def encode(self, strs):
@@ -130,7 +140,8 @@ class Solution(object):
         while left < right:
             sum = numbers[left] + numbers[right]
             if sum == target: return [left + 1, right + 1]
-            left, right = left + (sum < target), right - (sum > target)
+            elif sum < target: left += 1
+            else: right -= 1
     # https://leetcode.com/problems/3sum/
     def threeSum(self, nums):
         """
@@ -139,22 +150,17 @@ class Solution(object):
         """
         # using a sort (for 2-pointer), replicate twoSum but with an extra fixed value and anti-duplicate checks
         nums.sort()
-        size, result, i = len(nums), [], 0
-        while i < size:
-            if i > 0 and nums[i] == nums[i-1]:
-                i += 1
-                continue
+        size, result = len(nums), []
+        for i in range(size):
+            if i > 0 and nums[i] == nums[i-1]: continue
             left, right = i + 1, size - 1
             while left < right:
                 sum = nums[i] + nums[left] + nums[right]
                 if sum == 0:
                     result.append([nums[i], nums[left], nums[right]])
-                    while left < right and nums[left] == nums[left+1]:
-                        left += 1
-                    while left < right and nums[right] == nums[right-1]:
-                        right -= 1
+                    while left < right and nums[left] == nums[left+1]: left += 1
+                    while left < right and nums[right] == nums[right-1]: right -= 1
                     left, right = left + 1, right - 1
-                else:
-                    left, right = left + (sum < 0), right - (sum > 0)
-            i += 1
+                elif sum < 0: left += 1
+                else: right -= 1
         return result
