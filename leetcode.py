@@ -164,3 +164,17 @@ class Solution(object):
                 elif sum < 0: left += 1
                 else: right -= 1
         return result
+    # https://leetcode.com/problems/container-with-most-water/
+    def maxArea(self, height):
+        """
+        :type height: List[int]
+        :rtype: int
+        """
+        # get iteratively the best area by moving the lowest height pointer and stopping when there's no possible best area
+        left, right, best_area, max_height = 0, len(height) - 1, 0, max(height)
+        while left < right:
+            best_area = max(min(height[left], height[right]) * (right - left), best_area)
+            if height[left] < height[right]: left += 1
+            else: right -= 1
+            if best_area > max_height * (right - left): break
+        return best_area
