@@ -209,3 +209,43 @@ class Solution(object):
             if char in correspondance: stack.append(char)
             elif not len(stack) or char != correspondance[stack.pop()]:return False
         return not len(stack)
+    # https://leetcode.com/problems/min-stack/
+    class MinStack(object):
+
+        def __init__(self):
+            # init empty stack (main) and minimums stack (used for getMin)
+            self.stack = []
+            self.min_stack = []
+        
+        def push(self, val):
+            """
+            :type val: int
+            :rtype: None
+            """
+            # push val to stack, and to minimums stack if it's empty or a new minimum
+            self.stack.append(val)
+            if not self.min_stack or val <= self.min_stack[-1]:
+                self.min_stack.append(val)
+        
+        def pop(self):
+            """
+            :rtype: None
+            """
+            # pop val off stack, and off minimums stack if it's the minimum
+            result = self.stack.pop()
+            if result == self.min_stack[-1]:
+                self.min_stack.pop()
+        
+        def top(self):
+            """
+            :rtype: int
+            """
+            # peek the last stack value
+            return self.stack[-1]
+        
+        def getMin(self):
+            """
+            :rtype: int
+            """
+            # peek the stack minimum
+            return self.min_stack[-1]
