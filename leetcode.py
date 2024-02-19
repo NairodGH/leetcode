@@ -197,3 +197,15 @@ class Solution(object):
                 right_max = max(right_max, height[right])
                 total += (right_max - height[right])
         return total
+    # https://leetcode.com/problems/valid-parentheses/
+    def isValid(self, s):
+        """
+        :type s: str
+        :rtype: bool
+        """
+        # push opening brackets and pop closing ones if they match, the stack should then be empty at the end
+        stack, correspondance = [], {'(': ')', '[': ']', '{': '}'}
+        for char in s:
+            if char in correspondance: stack.append(char)
+            elif not len(stack) or char != correspondance[stack.pop()]:return False
+        return not len(stack)
