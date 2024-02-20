@@ -268,3 +268,17 @@ class Solution(object):
             else:
                 stack.append(int(token))
         return stack[0]
+    def generateParenthesis(self, n):
+        """
+        :type n: int
+        :rtype: List[str]
+        """
+        # use a tracking tuples stack to add the right parentheses and complete combinations
+        stack, result = [("(", 1, 0)], []
+        while stack:
+            s, open, close = stack.pop()
+            if open == close == n: result.append(s)
+            else:
+                if open < n: stack.append((s + "(", open + 1, close))
+                if close < open: stack.append((s + ")", open, close + 1))
+        return result
