@@ -249,3 +249,22 @@ class Solution(object):
             """
             # peek the stack minimum
             return self.min_stack[-1]
+    # https://leetcode.com/problems/evaluate-reverse-polish-notation/
+    def evalRPN(self, tokens):
+        """
+        :type tokens: List[str]
+        :rtype: int
+        """
+        # for each token, push the number or execute the operation on the last 2 numbers (extra steps for RPN's divisions)
+        stack = []
+        for token in tokens:
+            if token in ["+", "-", "*", "/"]:
+                num2, num1 = stack.pop(), stack.pop()
+                if token == "+": stack.append(num1 + num2)
+                elif token == "-": stack.append(num1 - num2)
+                elif token == "*": stack.append(num1 * num2)
+                elif num1 * num2 >= 0: stack.append(num1 // num2)
+                else: stack.append(-(-num1 // num2))
+            else:
+                stack.append(int(token))
+        return stack[0]
