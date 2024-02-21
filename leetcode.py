@@ -197,6 +197,9 @@ class Solution(object):
                 right_max = max(right_max, height[right])
                 total += (right_max - height[right])
         return total
+
+    # Stack
+
     # https://leetcode.com/problems/valid-parentheses/
     def isValid(self, s):
         """
@@ -281,4 +284,17 @@ class Solution(object):
             else:
                 if open < n: stack.append((s + "(", open + 1, close))
                 if close < open: stack.append((s + ")", open, close + 1))
+        return result
+    def dailyTemperatures(self, temperatures):
+        """
+        :type temperatures: List[int]
+        :rtype: List[int]
+        """
+        # use an indices stack of temperatures waiting for a warmer day, put the index differences in result when there is
+        stack, result = [], [0 for _ in range(len(temperatures))]
+        for i in range(len(temperatures)):
+            while stack and temperatures[stack[-1]] < temperatures[i]:
+                index = stack.pop()
+                result[index] = i - index
+            stack.append(i)
         return result
