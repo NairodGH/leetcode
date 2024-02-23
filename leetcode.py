@@ -1,3 +1,5 @@
+from typing import List
+
 class Solution(object):
 
     # https://neetcode.io/roadmap
@@ -5,20 +7,11 @@ class Solution(object):
     # Arrays & Hashing
 
     # https://leetcode.com/problems/contains-duplicate
-    def containsDuplicate(self, nums):
-        """
-        :type nums: List[int]
-        :rtype: bool
-        """
+    def containsDuplicate(self, nums: List[int]) -> bool:
         # use set()'s unique values property to check for duplicates by comparing the length
         return len(nums) > len(set(nums))
     # https://leetcode.com/problems/valid-anagram/
-    def isAnagram(self, s, t):
-        """
-        :type s: str
-        :type t: str
-        :rtype: bool
-        """
+    def isAnagram(self, s: str, t: str) -> bool:
         # check if both strings have the same length and letter frequency with a set
         if len(s) != len(t):
             return False
@@ -27,21 +20,12 @@ class Solution(object):
                 return False
         return True
     # https://leetcode.com/problems/two-sum
-    def twoSum(self, nums, target):
-        """
-        :type nums: List[int]
-        :type target: int
-        :rtype: List[int]
-        """
+    def twoSum(self, nums: List[int], target: int) -> List[int]:
         # use a value: index mapping of nums to return the index pair if target - num exists and isnt the same index (or None if it doesnt)
         num_indices = {num: i for i, num in enumerate(nums)}
         return next(([i, num_indices[target - num]] for i, num in enumerate(nums) if target - num in num_indices and i != num_indices[target - num]), None)
     # https://leetcode.com/problems/group-anagrams/
-    def groupAnagrams(self, strs):
-        """
-        :type strs: List[str]
-        :rtype: List[List[str]]
-        """
+    def groupAnagrams(self, strs: List[str]) -> List[List[str]]:
         # put each str into the sorted str key's (see isAnagram) array value then return the dictionnary as a list
         anagrams = {}
         for str in strs:
@@ -50,23 +34,14 @@ class Solution(object):
             else: anagrams[sorted_str] = [str]
         return list(anagrams.values())
     # https://leetcode.com/problems/top-k-frequent-elements/
-    def topKFrequent(self, nums, k):
-        """
-        :type nums: List[int]
-        :type k: int
-        :rtype: List[int]
-        """
+    def topKFrequent(self, nums: List[int], k: int) -> List[int]:
         # create a num: numCount dict then reverse sort it off its values to a k-long slice
         frequency = {}
         for num in nums:
             frequency[num] = frequency.get(num, 0) + 1
         return sorted(frequency, key=frequency.get, reverse=True)[:k]
     # https://leetcode.com/problems/product-of-array-except-self/
-    def productExceptSelf(self, nums):
-        """
-        :type nums: List[int]
-        :rtype: List[int]
-        """
+    def productExceptSelf(self, nums: List[int]) -> List[int]:
         # multiply the cross-running product from the left and right of nums into the respective output crossing indices
         n = len(nums)
         output, left_product, right_product = [1] * n, 1, 1
@@ -77,11 +52,7 @@ class Solution(object):
             right_product *= nums[~i]
         return output
     # https://leetcode.com/problems/valid-sudoku/
-    def isValidSudoku(self, board):
-        """
-        :type board: List[List[str]]
-        :rtype: bool
-        """
+    def isValidSudoku(self, board: List[List[str]]) -> bool:
         # using lists for each zones to verify, parse board into them to return False if there's any duplicates
         rows, lines, boxes = [[] for _ in range(9)], [[] for _ in range(9)], [[] for _ in range(9)]
         for i in range(9):
@@ -96,18 +67,14 @@ class Solution(object):
                 boxes[curr_k].append(board[i][j])
         return True
     # https://neetcode.io/problems/string-encode-and-decode
-    def encode(self, strs):
+    def encode(self, strs: List[str]) -> str:
         # combine all the strings into one while adding a \x00 separator after each
         return "".join([s + '\x00' for s in strs])
-    def decode(self, s):
+    def decode(self, s: str) -> List[str]:
         # split the string based on the separators (remove the excessive last one)
         return s.split('\x00')[:-1]
     # https://leetcode.com/problems/longest-consecutive-sequence
-    def longestConsecutive(self, nums):
-        """
-        :type nums: List[int]
-        :rtype: int
-        """
+    def longestConsecutive(self, nums: List[int]) -> int:
         # iterate over a nums set and its sequences to find the longest streak (couldn't use sort since O(n log n))
         nums, longest_streak = set(nums), 0
         for num in nums:
@@ -120,21 +87,12 @@ class Solution(object):
 
     # Two Pointers
 
-    def isPalindrome(self, s):
-        """
-        :type s: str
-        :rtype: bool
-        """
+    def isPalindrome(self, s: str) -> bool:
         # get the alphanumerical + lowercase string then compare each character with its mirrored equivalent
         formatted_str = ''.join([char for char in s if char.isalnum()]).lower()
         return all([formatted_str[i] == formatted_str[-(i + 1)] for i in range(len(formatted_str) // 2)])
     # https://leetcode.com/problems/two-sum-ii-input-array-is-sorted/
-    def twoSum(self, numbers, target):
-        """
-        :type numbers: List[int]
-        :type target: int
-        :rtype: List[int]
-        """
+    def twoSum(self, numbers: List[int], target: int) -> List[int]:
         # create 2 pointers at the start/end and move each toward the other based on the sum result until it's found
         left, right = 0, len(numbers) - 1
         while left < right:
@@ -143,11 +101,7 @@ class Solution(object):
             elif sum < target: left += 1
             else: right -= 1
     # https://leetcode.com/problems/3sum/
-    def threeSum(self, nums):
-        """
-        :type nums: List[int]
-        :rtype: List[List[int]]
-        """
+    def threeSum(self, nums: List[int]) -> List[List[int]]:
         # using a sort (for 2-pointer), replicate twoSum but with an extra fixed value and anti-duplicate checks
         nums.sort()
         size, result = len(nums), []
@@ -165,11 +119,7 @@ class Solution(object):
                 else: right -= 1
         return result
     # https://leetcode.com/problems/container-with-most-water/
-    def maxArea(self, height):
-        """
-        :type height: List[int]
-        :rtype: int
-        """
+    def maxArea(self, height: List[int]) -> int:
         # get iteratively the best area by moving the lowest height pointer and stopping when there's no possible best area
         left, right, best_area, max_height = 0, len(height) - 1, 0, max(height)
         while left < right:
@@ -179,11 +129,7 @@ class Solution(object):
             if best_area > max_height * (right - left): break
         return best_area
     # https://leetcode.com/problems/trapping-rain-water/
-    def trap(self, height):
-        """
-        :type height: List[int]
-        :rtype: int
-        """
+    def trap(self, height: List[int]) -> int:
         # at each step, converge left and right while adding their max and current height substraction in the total
         left, right, total = 0, len(height) - 1, 0
         left_max, right_max = height[left], height[right]
@@ -201,11 +147,7 @@ class Solution(object):
     # Stack
 
     # https://leetcode.com/problems/valid-parentheses/
-    def isValid(self, s):
-        """
-        :type s: str
-        :rtype: bool
-        """
+    def isValid(self, s: str) -> bool:
         # push opening brackets and pop closing ones if they match, the stack should then be empty at the end
         stack, correspondance = [], {'(': ')', '[': ']', '{': '}'}
         for char in s:
@@ -213,51 +155,34 @@ class Solution(object):
             elif not len(stack) or char != correspondance[stack.pop()]:return False
         return not len(stack)
     # https://leetcode.com/problems/min-stack/
-    class MinStack(object):
+    class MinStack:
 
         def __init__(self):
             # init empty stack (main) and minimums stack (used for getMin)
             self.stack = []
             self.min_stack = []
         
-        def push(self, val):
-            """
-            :type val: int
-            :rtype: None
-            """
+        def push(self, val: int) -> None:
             # push val to stack, and to minimums stack if it's empty or a new minimum
             self.stack.append(val)
             if not self.min_stack or val <= self.min_stack[-1]:
                 self.min_stack.append(val)
         
-        def pop(self):
-            """
-            :rtype: None
-            """
+        def pop(self) -> None:
             # pop val off stack, and off minimums stack if it's the minimum
             result = self.stack.pop()
             if result == self.min_stack[-1]:
                 self.min_stack.pop()
         
-        def top(self):
-            """
-            :rtype: int
-            """
+        def top(self) -> int:
             # peek the last stack value
             return self.stack[-1]
         
-        def getMin(self):
-            """
-            :rtype: int
-            """
+        def getMin(self) -> int:
             # peek the stack minimum
             return self.min_stack[-1]
     # https://leetcode.com/problems/evaluate-reverse-polish-notation/
-    def evalRPN(self, tokens):
-        """
-        :type tokens: List[str]
-        :rtype: int
-        """
+    def evalRPN(self, tokens: List[str]) -> int:
         # for each token, push the number or execute the operation on the last 2 numbers (extra steps for RPN's divisions)
         stack = []
         for token in tokens:
@@ -271,11 +196,8 @@ class Solution(object):
             else:
                 stack.append(int(token))
         return stack[0]
-    def generateParenthesis(self, n):
-        """
-        :type n: int
-        :rtype: List[str]
-        """
+    # https://leetcode.com/problems/generate-parentheses/
+    def generateParenthesis(self, n: int) -> List[str]:
         # use a tracking tuples stack to add the right parentheses and complete combinations
         stack, result = [("(", 1, 0)], []
         while stack:
@@ -285,11 +207,8 @@ class Solution(object):
                 if open < n: stack.append((s + "(", open + 1, close))
                 if close < open: stack.append((s + ")", open, close + 1))
         return result
-    def dailyTemperatures(self, temperatures):
-        """
-        :type temperatures: List[int]
-        :rtype: List[int]
-        """
+    # https://leetcode.com/problems/daily-temperatures/
+    def dailyTemperatures(self, temperatures: List[int]) -> List[int]:
         # use an indices stack of temperatures waiting for a warmer day, put the index differences in result when there is
         stack, result = [], [0 for _ in range(len(temperatures))]
         for i in range(len(temperatures)):
@@ -298,3 +217,12 @@ class Solution(object):
                 result[index] = i - index
             stack.append(i)
         return result
+    # https://leetcode.com/problems/car-fleet/
+    def carFleet(self, target: int, position: List[int], speed: List[int]) -> int:
+        # sort cars by position and store in a stack each different arrival times (fleets) based on if they can catch up
+        stack = []
+        for pos, spd in sorted(zip(position, speed), reverse=True):
+            time = (target - pos) / spd
+            if not stack: stack.append(time)
+            elif time > stack[-1]: stack.append(time)
+        return len(stack)
