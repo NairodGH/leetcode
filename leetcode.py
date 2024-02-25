@@ -234,3 +234,15 @@ class Solution(object):
             stack.append((start, height))
         for index, height in stack: max_area = max(max_area, height * (len(heights) - index))
         return max_area
+    
+    # Binary Search
+
+    # https://leetcode.com/problems/binary-search/
+    def search(self, nums: List[int], target: int) -> int:
+        left, right = 0, len(nums) - 1
+        while left <= right:
+            mid = (left + right) // 2
+            if nums[mid] == target: return mid
+            if target < nums[mid]: right = mid - 1
+            elif target > nums[mid]: left = mid + 1
+        return -1
