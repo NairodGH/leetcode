@@ -13,11 +13,9 @@ class Solution(object):
     # https://leetcode.com/problems/valid-anagram/
     def isAnagram(self, s: str, t: str) -> bool:
         # check if both strings have the same length and letter frequency with a set
-        if len(s) != len(t):
-            return False
+        if len(s) != len(t): return False
         for char in set(s):
-            if s.count(char) != t.count(char):
-                return False
+            if s.count(char) != t.count(char): return False
         return True
     # https://leetcode.com/problems/two-sum
     def twoSum(self, nums: List[int], target: int) -> List[int]:
@@ -152,7 +150,7 @@ class Solution(object):
         stack, correspondance = [], {'(': ')', '[': ']', '{': '}'}
         for char in s:
             if char in correspondance: stack.append(char)
-            elif not len(stack) or char != correspondance[stack.pop()]:return False
+            elif not len(stack) or char != correspondance[stack.pop()]: return False
         return not len(stack)
     # https://leetcode.com/problems/min-stack/
     class MinStack:
@@ -165,14 +163,12 @@ class Solution(object):
         def push(self, val: int) -> None:
             # push val to stack, and to minimums stack if it's empty or a new minimum
             self.stack.append(val)
-            if not self.min_stack or val <= self.min_stack[-1]:
-                self.min_stack.append(val)
+            if not self.min_stack or val <= self.min_stack[-1]: self.min_stack.append(val)
         
         def pop(self) -> None:
             # pop val off stack, and off minimums stack if it's the minimum
             result = self.stack.pop()
-            if result == self.min_stack[-1]:
-                self.min_stack.pop()
+            if result == self.min_stack[-1]: self.min_stack.pop()
         
         def top(self) -> int:
             # peek the last stack value
@@ -193,8 +189,7 @@ class Solution(object):
                 elif token == "*": stack.append(num1 * num2)
                 elif num1 * num2 >= 0: stack.append(num1 // num2)
                 else: stack.append(-(-num1 // num2))
-            else:
-                stack.append(int(token))
+            else: stack.append(int(token))
         return stack[0]
     # https://leetcode.com/problems/generate-parentheses/
     def generateParenthesis(self, n: int) -> List[str]:
@@ -226,3 +221,16 @@ class Solution(object):
             if not stack: stack.append(time)
             elif time > stack[-1]: stack.append(time)
         return len(stack)
+    # https://leetcode.com/problems/largest-rectangle-in-histogram/
+    def largestRectangleArea(self, heights: List[int]) -> int:
+        # stack (position, height) infos and store max area for each lower height, then check for the rest just in case
+        stack, max_area = [], 0
+        for index, height in enumerate(heights):
+            start = index
+            while stack and stack[-1][1] > height:
+                popped_index, popped_height = stack.pop()
+                max_area = max(max_area, popped_height * (index - popped_index))
+                start = popped_index
+            stack.append((start, height))
+        for index, height in stack: max_area = max(max_area, height * (len(heights) - index))
+        return max_area
