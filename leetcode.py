@@ -239,6 +239,7 @@ class Solution(object):
 
     # https://leetcode.com/problems/binary-search/
     def search(self, nums: List[int], target: int) -> int:
+        # split the search range in half according to the target until its found or not (-1)
         left, right = 0, len(nums) - 1
         while left <= right:
             mid = (left + right) // 2
@@ -246,3 +247,14 @@ class Solution(object):
             if target < nums[mid]: right = mid - 1
             elif target > nums[mid]: left = mid + 1
         return -1
+    # https://leetcode.com/problems/search-a-2d-matrix/
+    def searchMatrix(self, matrix: List[List[int]], target: int) -> bool:
+        # same as search above but bring matrix down to 1D and return True/False instead of target index/-1
+        matrix = [item for sublist in matrix for item in sublist]
+        left, right = 0, len(matrix) - 1
+        while left <= right:
+            mid = (left + right) // 2
+            if matrix[mid] == target: return True
+            if target < matrix[mid]: right = mid - 1
+            elif target > matrix[mid]: left = mid + 1
+        return False
