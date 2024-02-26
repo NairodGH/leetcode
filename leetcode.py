@@ -1,4 +1,5 @@
 from typing import List
+from math import ceil
 
 class Solution(object):
 
@@ -258,3 +259,12 @@ class Solution(object):
             if target < matrix[mid]: right = mid - 1
             elif target > matrix[mid]: left = mid + 1
         return False
+    # https://leetcode.com/problems/koko-eating-bananas/
+    def minEatingSpeed(self, piles: List[int], h: int) -> int:
+        # split the possible k range in half according to the feasability of k untill it converges on the best one
+        left, right = 1, max(piles)
+        while left != right:
+            k = (left + right) // 2
+            if sum([ceil(pile / k) for pile in piles]) <= h: right = k
+            else: left = k + 1
+        return left
