@@ -268,3 +268,12 @@ class Solution(object):
             if sum([ceil(pile / k) for pile in piles]) <= h: right = k
             else: left = k + 1
         return left
+    # https://leetcode.com/problems/find-minimum-in-rotated-sorted-array/
+    def findMin(self, nums: List[int]) -> int:
+        # converge left and right to narrow the unsorted part of the array where the minimum must be
+        left, right = 0, len(nums) - 1
+        while nums[right] < nums[left]:
+            mid = (left + right) // 2
+            if nums[mid] < nums[right]: right = mid
+            else: left = mid + 1
+        return nums[left]
