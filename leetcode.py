@@ -277,3 +277,19 @@ class Solution(object):
             if nums[mid] < nums[right]: right = mid
             else: left = mid + 1
         return nums[left]
+    # https://leetcode.com/problems/search-in-rotated-sorted-array/
+    def search(self, nums: List[int], target: int) -> int:
+        # find the pivot like findMin (l.272) then binary search the side where target is like search (l.242)
+        left, right = 0, len(nums) - 1
+        while nums[right] < nums[left]:
+            mid = (left + right) // 2
+            if nums[mid] < nums[right]: right = mid
+            else: left = mid + 1
+        if nums[left] <= target <= nums[-1]: right = len(nums) - 1
+        else: right, left = left, 0
+        while left <= right:
+            mid = (left + right) // 2
+            if nums[mid] == target: return mid
+            if target < nums[mid]: right = mid - 1
+            elif target > nums[mid]: left = mid + 1
+        return -1
