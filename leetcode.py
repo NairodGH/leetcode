@@ -293,3 +293,25 @@ class Solution(object):
             if target < nums[mid]: right = mid - 1
             elif target > nums[mid]: left = mid + 1
         return -1
+    # https://leetcode.com/problems/time-based-key-value-store/
+    class TimeMap:
+
+        def __init__(self):
+            # init empty dict
+            self.timeMap = {}
+
+        def set(self, key: str, value: str, timestamp: int) -> None:
+            # add the (value, timestamp) tuple to timeMap's corresponding key (init to empty array if it didnt exist)
+            if key not in self.timeMap: self.timeMap[key] = []
+            self.timeMap[key].append((value, timestamp))
+
+        def get(self, key: str, timestamp: int) -> str:
+            # check if valid key/timestamp then binary search based on "timestamp_prev <= timestamp"
+            if key in self.timeMap and self.timeMap[key][0][1] <= timestamp:
+                left, right = 0, len(self.timeMap[key]) - 1
+                while left < right:
+                    mid = (left + right + 1) // 2
+                    if timestamp >= self.timeMap[key][mid][1]: left = mid
+                    else: right = mid - 1
+                return self.timeMap[key][left][0]
+            return ""
