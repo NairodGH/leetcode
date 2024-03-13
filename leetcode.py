@@ -298,20 +298,38 @@ class Solution(object):
 
         def __init__(self):
             # init empty dict
-            self.timeMap = {}
+            self.time_map = {}
 
         def set(self, key: str, value: str, timestamp: int) -> None:
-            # add the (value, timestamp) tuple to timeMap's corresponding key (init to empty array if it didnt exist)
-            if key not in self.timeMap: self.timeMap[key] = []
-            self.timeMap[key].append((value, timestamp))
+            # add the (value, timestamp) tuple to time_map's corresponding key (init to empty array if it didnt exist)
+            if key not in self.time_map: self.time_map[key] = []
+            self.time_map[key].append((value, timestamp))
 
         def get(self, key: str, timestamp: int) -> str:
             # check if valid key/timestamp then binary search based on "timestamp_prev <= timestamp"
-            if key in self.timeMap and self.timeMap[key][0][1] <= timestamp:
-                left, right = 0, len(self.timeMap[key]) - 1
+            if key in self.time_map and self.time_map[key][0][1] <= timestamp:
+                left, right = 0, len(self.time_map[key]) - 1
                 while left < right:
                     mid = (left + right + 1) // 2
-                    if timestamp >= self.timeMap[key][mid][1]: left = mid
+                    if timestamp >= self.time_map[key][mid][1]: left = mid
                     else: right = mid - 1
-                return self.timeMap[key][left][0]
+                return self.time_map[key][left][0]
             return ""
+    # https://leetcode.com/problems/median-of-two-sorted-arrays/
+    def findMedianSortedArrays(self, nums1: List[int], nums2: List[int]) -> float:
+        # find the points in each list where left numbers are smaller than right numbers then calculate median off of them
+        if len(nums1) > len(nums2): nums1, nums2 = nums2, nums1
+        len1, len2 = len(nums1), len(nums2)
+        left1, right1 = 0, len1
+        while left1 <= right1:
+            partition1 = (left1 + right1) // 2
+            partition2 = ((len1 + len2 + 1) // 2) - partition1
+            max_left_1 = float('-inf') if partition1 == 0 else nums1[partition1 - 1]
+            min_right_1 = float('inf') if partition1 == len1 else nums1[partition1]
+            max_left_2 = float('-inf') if partition2 == 0 else nums2[partition2 - 1]
+            min_right_2 = float('inf') if partition2 == len2 else nums2[partition2]
+            if max_left_1 <= min_right_2 and max_left_2 <= min_right_1:
+                if (len1 + len2) % 2 == 0: return float(max(max_left_1, max_left_2) + min(min_right_1, min_right_2)) / 2
+                else: return max(max_left_1, max_left_2)
+            elif max_left_1 > min_right_2: right1 = partition1 - 1
+            else: left1 = partition1 + 1
