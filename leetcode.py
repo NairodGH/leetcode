@@ -333,3 +333,11 @@ class Solution(object):
                 else: return max(max_left_1, max_left_2)
             elif max_left_1 > min_right_2: right1 = partition1 - 1
             else: left1 = partition1 + 1
+    # https://leetcode.com/problems/best-time-to-buy-and-sell-stock/
+    def maxProfit(self, prices: List[int]) -> int:
+        # record the max profit while searching for the minimum price
+        min_price, max_profit = float('inf'), 0
+        for price in prices:
+            if price < min_price: min_price = price
+            elif price - min_price > max_profit: max_profit = price - min_price
+        return max_profit
