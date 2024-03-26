@@ -341,3 +341,13 @@ class Solution(object):
             if price < min_price: min_price = price
             elif price - min_price > max_profit: max_profit = price - min_price
         return max_profit
+    # https://leetcode.com/problems/longest-substring-without-repeating-characters/
+    def lengthOfLongestSubstring(self, s: str) -> int:
+        # use a map to move the sliding window's start across s while recording the max length
+        char_map = {}
+        max_len = start = 0
+        for i, char in enumerate(s):
+            if char in char_map and start <= char_map[char]: start = char_map[char] + 1
+            else: max_len = max(max_len, i - start + 1)
+            char_map[char] = i
+        return max_len
