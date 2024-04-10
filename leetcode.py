@@ -333,6 +333,9 @@ class Solution(object):
                 else: return max(max_left_1, max_left_2)
             elif max_left_1 > min_right_2: right1 = partition1 - 1
             else: left1 = partition1 + 1
+
+    # Sliding Window
+
     # https://leetcode.com/problems/best-time-to-buy-and-sell-stock/
     def maxProfit(self, prices: List[int]) -> int:
         # record the max profit while searching for the minimum price
@@ -351,3 +354,18 @@ class Solution(object):
             else: max_len = max(max_len, i - start + 1)
             char_map[char] = i
         return max_len
+    # https://leetcode.com/problems/longest-repeating-character-replacement/
+    def characterReplacement(self, s: str, k: int) -> int:
+        # use a freq map to move a valid (within max freq + k) sliding window across s while recording its max length
+        left = right = max_freq = result = 0
+        letters_freq = {}
+        while right < len(s):
+            letters_freq[s[right]] = letters_freq.get(s[right], 0) + 1
+            max_freq = max(max_freq, letters_freq[s[right]])
+            if right - left + 1 > max_freq + k:
+                letters_freq[s[left]] -= 1
+                left += 1
+            else:
+                result = max(result, right - left + 1)
+            right += 1
+        return result
