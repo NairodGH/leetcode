@@ -103,14 +103,14 @@ class Solution(object):
     def threeSum(self, nums: List[int]) -> List[List[int]]:
         # using a sort (for 2-pointer), replicate twoSum but with an extra fixed value and anti-duplicate checks
         nums.sort()
-        size, result = len(nums), []
-        for i in range(size):
-            if i > 0 and nums[i] == nums[i-1]: continue
-            left, right = i + 1, size - 1
+        result = []
+        for i, num in enumerate(nums):
+            if i > 0 and num == nums[i-1]: continue
+            left, right = i + 1, len(nums) - 1
             while left < right:
-                sum = nums[i] + nums[left] + nums[right]
+                sum = num + nums[left] + nums[right]
                 if sum == 0:
-                    result.append([nums[i], nums[left], nums[right]])
+                    result.append([num, nums[left], nums[right]])
                     while left < right and nums[left] == nums[left+1]: left += 1
                     while left < right and nums[right] == nums[right-1]: right -= 1
                     left, right = left + 1, right - 1
@@ -206,9 +206,9 @@ class Solution(object):
     # https://leetcode.com/problems/daily-temperatures/
     def dailyTemperatures(self, temperatures: List[int]) -> List[int]:
         # use an indices stack of temperatures waiting for a warmer day, put the index differences in result when there is
-        stack, result = [], [0 for _ in range(len(temperatures))]
-        for i in range(len(temperatures)):
-            while stack and temperatures[stack[-1]] < temperatures[i]:
+        stack, result = [], [0 for _ in enumerate(temperatures)]
+        for i, temperature in enumerate(temperatures):
+            while stack and temperatures[stack[-1]] < temperature:
                 index = stack.pop()
                 result[index] = i - index
             stack.append(i)
@@ -365,7 +365,19 @@ class Solution(object):
             if right - left + 1 > max_freq + k:
                 letters_freq[s[left]] -= 1
                 left += 1
-            else:
-                result = max(result, right - left + 1)
+            else: result = max(result, right - left + 1)
             right += 1
         return result
+    # https://leetcode.com/problems/permutation-in-string/
+    def checkInclusion(self, s1: str, s2: str) -> bool:
+        # move a s1-sized window over s2 while comparing letter frequencies until they match (True) or not (False)
+        s1_freq = {}
+        window_freq = {}
+        for char in s1: s1_freq[char] = s1_freq.get(char, 0) + 1
+        for i, char in enumerate(s2):
+            window_freq[char] = window_freq.get(char, 0) + 1
+            if i >= len(s1):
+                if window_freq[s2[i - len(s1)]] == 1: del window_freq[s2[i - len(s1)]]
+                else: window_freq[s2[i - len(s1)]] -= 1
+            if window_freq == s1_freq: return True
+        return False
