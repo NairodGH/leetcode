@@ -381,3 +381,24 @@ class Solution(object):
                 else: window_freq[s2[i - len(s1)]] -= 1
             if window_freq == s1_freq: return True
         return False
+    # https://leetcode.com/problems/minimum-window-substring/
+    def minWindow(self, s: str, t: str) -> str:
+        # move a left/right pointers window accross s while saving (min_start min_len) the smallest valid (t_counter) substring
+        if not s or not t or len(s) < len(t): return ""
+        letters_freq = [0] * 128
+        t_counter = len(t)
+        left = right = min_start = 0
+        min_len = float('inf')
+        for char in t: letters_freq[ord(char)] += 1
+        while right < len(s):
+            if letters_freq[ord(s[right])] > 0: t_counter -= 1
+            letters_freq[ord(s[right])] -= 1
+            right += 1
+            while t_counter == 0:
+                if right - left < min_len:
+                    min_start = left
+                    min_len = right - left
+                if letters_freq[ord(s[left])] == 0: t_counter += 1
+                letters_freq[ord(s[left])] += 1
+                left += 1
+        return "" if min_len == float('inf') else s[min_start:min_start + min_len]
