@@ -1,5 +1,6 @@
 from typing import List
 from math import ceil
+from collections import deque
 
 class Solution(object):
 
@@ -402,3 +403,15 @@ class Solution(object):
                 letters_freq[ord(s[left])] += 1
                 left += 1
         return "" if min_len == float('inf') else s[min_start:min_start + min_len]
+    # https://leetcode.com/problems/sliding-window-maximum/
+    def maxSlidingWindow(self, nums: List[int], k: int) -> List[int]:
+        # use a dequeue window keeping track of max num indices to store their num in result
+        result = []
+        window = deque()
+        for i, num in enumerate(nums):
+            while window and num > nums[window[-1]]: window.pop()
+            window.append(i)
+            if i + 1 >= k:
+                result.append(nums[window[0]])
+                if i + 1 - k >= window[0]: window.popleft()
+        return result
