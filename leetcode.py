@@ -1,4 +1,4 @@
-from typing import List
+from typing import List, Optional
 from math import ceil
 from collections import deque
 
@@ -415,3 +415,21 @@ class Solution(object):
                 result.append(nums[window[0]])
                 if i + 1 - k >= window[0]: window.popleft()
         return result
+    
+    # Linked List
+
+    # https://leetcode.com/problems/reverse-linked-list/
+    class ListNode:
+        def __init__(self, val=0, next=None):
+            self.val = val
+            self.next = next
+    def reverseList(self, head: Optional[ListNode]) -> Optional[ListNode]:
+        # change the next pointer to the prev one for each node
+        prev = None
+        curr = head
+        while curr:
+            next = curr.next
+            curr.next = prev
+            prev = curr
+            curr = next
+        return prev
