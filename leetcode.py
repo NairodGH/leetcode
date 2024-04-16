@@ -418,11 +418,11 @@ class Solution(object):
     
     # Linked List
 
-    # https://leetcode.com/problems/reverse-linked-list/
     class ListNode:
         def __init__(self, val=0, next=None):
             self.val = val
             self.next = next
+    # https://leetcode.com/problems/reverse-linked-list/
     def reverseList(self, head: Optional[ListNode]) -> Optional[ListNode]:
         # change the next pointer to the prev one for each node
         prev = None
@@ -433,6 +433,7 @@ class Solution(object):
             prev = curr
             curr = next
         return prev
+    # https://leetcode.com/problems/merge-two-sorted-lists/
     def mergeTwoLists(self, list1: Optional[ListNode], list2: Optional[ListNode]) -> Optional[ListNode]:
         # traverse list1 and list2 while linking their numbers in order to a node, link the rest since necessarily greater
         prehead = curr = ListNode() # type: ignore
@@ -446,3 +447,27 @@ class Solution(object):
             curr = curr.next
         curr.next = list1 if list1 is not None else list2
         return prehead.next
+    # https://leetcode.com/problems/reorder-list/
+    def reorderList(self, head: Optional[ListNode]) -> None:
+        # find the middle using slow-fast pointers, reverse the second half and merge both halves alternately
+        if not head or not head.next: return head
+        slow = fast = head
+        while fast and fast.next:
+            slow = slow.next
+            fast = fast.next.next
+        prev = None
+        curr = slow
+        while curr:
+            temp = curr.next
+            curr.next = prev
+            prev = curr
+            curr = temp
+        left = head
+        right = prev
+        while right.next:
+            temp1 = left.next
+            temp2 = right.next
+            left.next = right
+            right.next = temp1
+            left = temp1
+            right = temp2
