@@ -471,3 +471,13 @@ class Solution(object):
             right.next = temp1
             left = temp1
             right = temp2
+    # https://leetcode.com/problems/remove-nth-node-from-end-of-list/
+    def removeNthFromEnd(self, head: Optional[ListNode], n: int) -> Optional[ListNode]:
+        # advance pointer A n times then A and B until A reaches the end so that B is nth from the end, remove node at B
+        first = second = dummy = ListNode(next=head) # type: ignore
+        for _ in range(n + 1): first = first.next
+        while first is not None:
+            second = second.next
+            first = first.next
+        second.next = second.next.next if second.next is not None else None
+        return dummy.next
