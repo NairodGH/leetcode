@@ -481,3 +481,24 @@ class Solution(object):
             first = first.next
         second.next = second.next.next if second.next is not None else None
         return dummy.next
+    # Definition for a Node.
+    class Node:
+        def __init__(self, x: int, next: 'Node' = None, random: 'Node' = None): # type: ignore
+            self.val = int(x)
+            self.next = next
+            self.random = random
+    # https://leetcode.com/problems/copy-list-with-random-pointer/
+    def copyRandomList(self, head: 'Optional[Node]') -> 'Optional[Node]':
+        # create nodes copies without random pointers, set their next/random pointers and map them to the original ones
+        if not head: return None
+        node_map = {}
+        current = head
+        while current:
+            node_map[current] = Node(current.val) # type: ignore
+            current = current.next
+        current = head
+        while current:
+            if current.next: node_map[current].next = node_map[current.next]
+            if current.random: node_map[current].random = node_map[current.random]
+            current = current.next
+        return node_map[head]
