@@ -2,6 +2,16 @@ from typing import List, Optional
 from math import ceil
 from collections import deque
 
+class ListNode:
+    def __init__(self, val=0, next=None):
+        self.val = val
+        self.next = next
+class Node:
+        def __init__(self, x: int, next: 'Node' = None, random: 'Node' = None):
+            self.val = int(x)
+            self.next = next
+            self.random = random
+
 class Solution(object):
 
     # https://neetcode.io/roadmap
@@ -418,10 +428,6 @@ class Solution(object):
     
     # Linked List
 
-    class ListNode:
-        def __init__(self, val=0, next=None):
-            self.val = val
-            self.next = next
     # https://leetcode.com/problems/reverse-linked-list/
     def reverseList(self, head: Optional[ListNode]) -> Optional[ListNode]:
         # change the next pointer to the prev one for each node
@@ -436,7 +442,7 @@ class Solution(object):
     # https://leetcode.com/problems/merge-two-sorted-lists/
     def mergeTwoLists(self, list1: Optional[ListNode], list2: Optional[ListNode]) -> Optional[ListNode]:
         # traverse list1 and list2 while linking their numbers in order to a node, link the rest since necessarily greater
-        prehead = curr = ListNode() # type: ignore
+        prehead = curr = ListNode()
         while list1 and list2:
             if list1.val <= list2.val:
                 curr.next = list1
@@ -474,19 +480,13 @@ class Solution(object):
     # https://leetcode.com/problems/remove-nth-node-from-end-of-list/
     def removeNthFromEnd(self, head: Optional[ListNode], n: int) -> Optional[ListNode]:
         # advance pointer A n times then A and B until A reaches the end so that B is nth from the end, remove node at B
-        first = second = dummy = ListNode(next=head) # type: ignore
+        first = second = dummy = ListNode(next=head)
         for _ in range(n + 1): first = first.next
         while first is not None:
             second = second.next
             first = first.next
         second.next = second.next.next if second.next is not None else None
         return dummy.next
-    # Definition for a Node.
-    class Node:
-        def __init__(self, x: int, next: 'Node' = None, random: 'Node' = None): # type: ignore
-            self.val = int(x)
-            self.next = next
-            self.random = random
     # https://leetcode.com/problems/copy-list-with-random-pointer/
     def copyRandomList(self, head: 'Optional[Node]') -> 'Optional[Node]':
         # create nodes copies without random pointers, set their next/random pointers and map them to the original ones
@@ -494,7 +494,7 @@ class Solution(object):
         node_map = {}
         current = head
         while current:
-            node_map[current] = Node(current.val) # type: ignore
+            node_map[current] = Node(current.val)
             current = current.next
         current = head
         while current:
@@ -502,3 +502,19 @@ class Solution(object):
             if current.random: node_map[current].random = node_map[current.random]
             current = current.next
         return node_map[head]
+    # https://leetcode.com/problems/add-two-numbers/
+    def addTwoNumbers(self, l1: Optional[ListNode], l2: Optional[ListNode]) -> Optional[ListNode]:
+        # go through l1 and l2 and create the sum linked list while keeping track of the carry
+        prehead = current = ListNode()
+        carry = 0
+        while l1 or l2 or carry:
+            val1 = l1.val if l1 else 0
+            val2 = l2.val if l2 else 0
+            total = val1 + val2 + carry
+            carry = total // 10
+            digit = total % 10
+            current.next = ListNode(digit)
+            current = current.next
+            l1 = l1.next if l1 else None
+            l2 = l2.next if l2 else None
+        return prehead.next
