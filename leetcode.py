@@ -518,3 +518,14 @@ class Solution(object):
             l1 = l1.next if l1 else None
             l2 = l2.next if l2 else None
         return prehead.next
+    # https://leetcode.com/problems/linked-list-cycle/
+    def hasCycle(self, head: Optional[ListNode]) -> bool:
+        # move slow and fast pointers until fast reaches the end, if fast is ever back to slow then there's a cycle
+        if not head or not head.next: return False
+        slow = head
+        fast = head.next
+        while fast and fast.next:
+            if slow == fast: return True
+            slow = slow.next
+            fast = fast.next.next
+        return False
