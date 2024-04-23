@@ -529,3 +529,16 @@ class Solution(object):
             slow = slow.next
             fast = fast.next.next
         return False
+    # https://leetcode.com/problems/find-the-duplicate-number/
+    def findDuplicate(self, nums: List[int]) -> int:
+        # treat numbers as pointers and the List as linked, use slow and fast pointer to find the cycle (duplicate) like in hasCycle
+        slow = fast = nums[0]
+        while True:
+            slow = nums[slow]
+            fast = nums[nums[fast]]
+            if slow == fast: break
+        slow = nums[0]
+        while slow != fast:
+            slow = nums[slow]
+            fast = nums[fast]
+        return slow
