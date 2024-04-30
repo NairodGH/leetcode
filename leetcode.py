@@ -1,16 +1,16 @@
 from typing import List, Optional
 from math import ceil
-from collections import deque
+from collections import deque, OrderedDict
 
 class ListNode:
     def __init__(self, val=0, next=None):
         self.val = val
         self.next = next
 class Node:
-        def __init__(self, x: int, next: 'Node' = None, random: 'Node' = None):
-            self.val = int(x)
-            self.next = next
-            self.random = random
+    def __init__(self, x: int, next: 'Node' = None, random: 'Node' = None):
+        self.val = int(x)
+        self.next = next
+        self.random = random
 
 class Solution(object):
 
@@ -542,3 +542,21 @@ class Solution(object):
             slow = nums[slow]
             fast = nums[fast]
         return slow
+    # https://leetcode.com/problems/lru-cache/
+    class LRUCache:
+        # initialize the OrderedDict and set the capacity
+        def __init__(self, capacity: int):
+            self.cache = OrderedDict()
+            self.capacity = capacity
+
+        # return the cache's key value if it exist while moving it to the end (most recent used key)
+        def get(self, key: int) -> int:
+            if key not in self.cache: return -1
+            self.cache.move_to_end(key)
+            return self.cache[key]
+
+        # change the cache's key value while moving it to then end, if the capacity is exceeded pop the first (LRU) key
+        def put(self, key: int, value: int) -> None:
+            if key in self.cache: self.cache.move_to_end(key)
+            self.cache[key] = value
+            if len(self.cache) > self.capacity: self.cache.popitem(False)
