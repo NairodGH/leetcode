@@ -560,3 +560,28 @@ class Solution(object):
             if key in self.cache: self.cache.move_to_end(key)
             self.cache[key] = value
             if len(self.cache) > self.capacity: self.cache.popitem(False)
+    # https://leetcode.com/problems/merge-k-sorted-lists/
+    def mergeKLists(self, lists: List[Optional[ListNode]]) -> Optional[ListNode]:
+        # define a function to merge 2 lists and divide and conquer through lists with it by pushing results into mergedLists until it's 1D
+        def mergeTwoLists(l1: Optional[ListNode], l2: Optional[ListNode]) -> Optional[ListNode]:
+            dummy = ListNode(0)
+            curr = dummy
+            while l1 and l2:
+                if l1.val < l2.val:
+                    curr.next = l1
+                    l1 = l1.next
+                else:
+                    curr.next = l2
+                    l2 = l2.next
+                curr = curr.next
+            curr.next = l1 if l1 else l2
+            return dummy.next
+
+        while len(lists) > 1:
+            mergedLists = []
+            for i in range(0, len(lists), 2):
+                l1 = lists[i]
+                l2 = lists[i + 1] if i + 1 < len(lists) else None
+                mergedLists.append(mergeTwoLists(l1, l2))
+            lists = mergedLists
+        return lists[0] if lists else None
