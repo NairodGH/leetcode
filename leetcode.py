@@ -585,3 +585,20 @@ class Solution(object):
                 mergedLists.append(mergeTwoLists(l1, l2))
             lists = mergedLists
         return lists[0] if lists else None
+    # https://leetcode.com/problems/reverse-nodes-in-k-group/
+    def reverseKGroup(self, head: Optional[ListNode], k: int) -> Optional[ListNode]:
+        # go through each k-sized groups of the list (using left-right ranges and jump sizes) while reversing them until there isn't any group left
+        dummy = jump = ListNode(0)
+        dummy.next = left = right = head
+        while True:
+            count = 0
+            while right and count < k:
+                right = right.next
+                count += 1
+            if count == k:
+                prev, curr = right, left
+                for _ in range(k):
+                    curr.next, curr, prev = prev, curr.next, curr
+                jump.next, jump, left = prev, left, right
+            else:
+                return dummy.next
