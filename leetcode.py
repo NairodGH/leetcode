@@ -6,11 +6,18 @@ class ListNode:
     def __init__(self, val=0, next=None):
         self.val = val
         self.next = next
+
 class Node:
     def __init__(self, x: int, next: 'Node' = None, random: 'Node' = None):
         self.val = int(x)
         self.next = next
         self.random = random
+
+class TreeNode:
+    def __init__(self, val=0, left=None, right=None):
+        self.val = val
+        self.left = left
+        self.right = right
 
 class Solution(object):
 
@@ -602,3 +609,15 @@ class Solution(object):
                 jump.next, jump, left = prev, left, right
             else:
                 return dummy.next
+    
+    # Trees
+
+    # https://leetcode.com/problems/invert-binary-tree/
+    def invertTree(self, root: Optional[TreeNode]) -> Optional[TreeNode]:
+        # recursively swap left and right pointers until we reach the end of the tree
+        temp = root.left
+        root.left = root.right
+        root.right = temp
+        self.invertTree(root.left)
+        self.invertTree(root.right)
+        return root
