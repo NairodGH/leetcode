@@ -621,3 +621,15 @@ class Solution(object):
         self.invertTree(root.left)
         self.invertTree(root.right)
         return root
+    # https://leetcode.com/problems/maximum-depth-of-binary-tree/
+    def maxDepth(self, root: Optional[TreeNode]) -> int:
+        # use a deque to store root+depth tuples along the tree while increasing depths and storing the max
+        if not root: return 0
+        queue = deque([(root, 1)])
+        max_depth = 0
+        while queue:
+            node, depth = queue.popleft()
+            max_depth = max(max_depth, depth)
+            if node.left: queue.append((node.left, depth + 1))
+            if node.right: queue.append((node.right, depth + 1))
+        return max_depth
