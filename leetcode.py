@@ -633,3 +633,15 @@ class Solution(object):
             if node.left: queue.append((node.left, depth + 1))
             if node.right: queue.append((node.right, depth + 1))
         return max_depth
+    # https://leetcode.com/problems/diameter-of-binary-tree/
+    def diameterOfBinaryTree(self, root: Optional[TreeNode]) -> int:
+        # DFS through the tree while saving the max diameter from the recursive left+right diameters
+        self.diameter = 0
+        def DFS(node):
+            if not node: return 0
+            left_diameter = DFS(node.left)
+            right_diameter = DFS(node.right)
+            self.diameter = max(self.diameter, left_diameter + right_diameter)
+            return 1 + max(left_diameter, right_diameter)
+        DFS(root)
+        return self.diameter
