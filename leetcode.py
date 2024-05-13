@@ -645,3 +645,12 @@ class Solution(object):
             return 1 + max(left_diameter, right_diameter)
         DFS(root)
         return self.diameter
+    # https://leetcode.com/problems/balanced-binary-tree/
+    def isBalanced(self, root: Optional[TreeNode]) -> bool:
+        # DFS through the tree by counting each level from the recursive max(left, right) + 1 until the difference is more than 1 (unbalanced) or not
+        def DFS(node):
+            if not node: return 0
+            left, right = DFS(node.left), DFS(node.right)
+            if left == -1 or right == -1 or abs(left - right) > 1: return -1
+            return max(left, right) + 1
+        return DFS(root) != -1
