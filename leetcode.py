@@ -654,3 +654,10 @@ class Solution(object):
             if left == -1 or right == -1 or abs(left - right) > 1: return -1
             return max(left, right) + 1
         return DFS(root) != -1
+    # https://leetcode.com/problems/same-tree/
+    def isSameTree(self, p: Optional[TreeNode], q: Optional[TreeNode]) -> bool:
+        # recursively check left and right of both trees at the same time, stoping at any equality until we're sure both are the same
+        if not p and not q: return True
+        if not p or not q: return False
+        if p.val != q.val: return False
+        return self.isSameTree(p.left, q.left) and self.isSameTree(p.right, q.right)
