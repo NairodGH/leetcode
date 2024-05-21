@@ -661,3 +661,9 @@ class Solution(object):
         if not p or not q: return False
         if p.val != q.val: return False
         return self.isSameTree(p.left, q.left) and self.isSameTree(p.right, q.right)
+    # https://neetcode.io/problems/subtree-of-a-binary-tree
+    def isSubtree(self, root: Optional[TreeNode], subRoot: Optional[TreeNode]) -> bool:
+        # recursively check if left or right are equal to the subRoot using isSameTree
+        if not root: return False
+        if self.isSameTree(root, subRoot): return True
+        return self.isSubtree(root.left, subRoot) or self.isSubtree(root.right, subRoot)
