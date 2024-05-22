@@ -667,3 +667,11 @@ class Solution(object):
         if not root: return False
         if self.isSameTree(root, subRoot): return True
         return self.isSubtree(root.left, subRoot) or self.isSubtree(root.right, subRoot)
+    # https://leetcode.com/problems/lowest-common-ancestor-of-a-binary-search-tree/
+    def lowestCommonAncestor(self, root: 'TreeNode', p: 'TreeNode', q: 'TreeNode') -> 'TreeNode':
+        # use the BST property to find the LCA and return it
+        current = root
+        while current:
+            if p.val < current.val and q.val < current.val: current = current.left
+            elif p.val > current.val and q.val > current.val: current = current.right
+            else: return current
