@@ -675,3 +675,15 @@ class Solution(object):
             if p.val < current.val and q.val < current.val: current = current.left
             elif p.val > current.val and q.val > current.val: current = current.right
             else: return current
+    # https://leetcode.com/problems/binary-tree-level-order-traversal/
+    def levelOrder(self, root: Optional[TreeNode]) -> List[List[int]]:
+        # use a recursive support function to traverse the tree from root while recording values at their levels
+        if not root: return []
+        result = []
+        def traverse(node: TreeNode, level: int):
+            if len(result) == level: result.append([])
+            result[level].append(node.val)
+            if node.left: traverse(node.left, level + 1)
+            if node.right: traverse(node.right, level + 1)
+        traverse(root, 0)
+        return result
