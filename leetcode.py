@@ -687,3 +687,14 @@ class Solution(object):
             if node.right: traverse(node.right, level + 1)
         traverse(root, 0)
         return result
+    # https://leetcode.com/problems/binary-tree-right-side-view/
+    def rightSideView(self, root: Optional[TreeNode]) -> List[int]:
+        # DFS through the tree while getting values at their levels (right first for right side, leetcode trees design)
+        result = []
+        def DFS(node, level):
+            if not node: return
+            if level == len(result): result.append(node.val)
+            DFS(node.right, level + 1)
+            DFS(node.left, level + 1)
+        DFS(root, 0)
+        return result
