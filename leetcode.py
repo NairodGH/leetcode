@@ -698,3 +698,17 @@ class Solution(object):
             DFS(node.left, level + 1)
         DFS(root, 0)
         return result
+    # https://leetcode.com/problems/count-good-nodes-in-binary-tree/
+    def goodNodes(self, root: TreeNode) -> int:
+        # DFS through the tree while adding to count (array alloc trick) whenever val is greater than the prev's (good node)
+        if not root: return 0
+        count = [0]
+        def DFS(node, curMax):
+            if not node: return
+            if node.val >= curMax:
+                count[0] += 1
+                curMax = node.val
+            DFS(node.left, curMax)
+            DFS(node.right, curMax)
+        DFS(root, root.val)
+        return count[0]
