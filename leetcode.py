@@ -712,3 +712,11 @@ class Solution(object):
             DFS(node.right, curMax)
         DFS(root, root.val)
         return count[0]
+    # https://leetcode.com/problems/validate-binary-search-tree/
+    def isValidBST(self, root: Optional[TreeNode]) -> bool:
+        # recursively validate the tree's BST properties with a support function
+        def validate(node, low=float('-inf'), high=float('inf')):
+            if not node: return True
+            if not low < node.val < high: return False
+            return validate(node.left, low, node.val) and validate(node.right, node.val, high)
+        return validate(root)
