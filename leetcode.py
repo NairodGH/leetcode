@@ -720,3 +720,18 @@ class Solution(object):
             if not low < node.val < high: return False
             return validate(node.left, low, node.val) and validate(node.right, node.val, high)
         return validate(root)
+    # https://leetcode.com/problems/kth-smallest-element-in-a-bst/
+    def kthSmallest(self, root: Optional[TreeNode], k: int) -> int:
+        # recursive in-order (left, root, right) traversal through the tree, return when k-th found (smallest since BST property)
+        self.k = k
+        self.result = None
+        def sort(node):
+            if node is None: return
+            sort(node.left)
+            self.k -= 1
+            if self.k == 0:
+                self.result = node.val
+                return
+            sort(node.right)
+        sort(root)
+        return self.result
