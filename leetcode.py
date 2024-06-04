@@ -749,3 +749,17 @@ class Solution(object):
             root.right = helper(pre_left + left_size + 1, pre_right, in_root_id + 1, in_right)
             return root
         return helper(0, len(preorder) - 1, 0, len(inorder) - 1)
+    # https://leetcode.com/problems/binary-tree-maximum-path-sum/
+    def maxPathSum(self, root: Optional[TreeNode]) -> int:
+        # DFS through the tree while recording the max_sum along pathes
+        max_sum = float('-inf')
+        def DFS(node):
+            nonlocal max_sum
+            if not node: return 0
+            left_gain = max(DFS(node.left), 0)
+            right_gain = max(DFS(node.right), 0)
+            price_newpath = node.val + left_gain + right_gain
+            max_sum = max(max_sum, price_newpath)
+            return node.val + max(left_gain, right_gain)
+        DFS(root)
+        return max_sum
