@@ -763,3 +763,22 @@ class Solution(object):
             return node.val + max(left_gain, right_gain)
         DFS(root)
         return max_sum
+    # https://leetcode.com/problems/serialize-and-deserialize-binary-tree/
+    class Codec:
+        # DFS through root in pre-order to build the string representation of the tree with its comma-separated values
+        def serialize(self, root):
+            def DFS(node):
+                if not node: return 'null,'
+                return str(node.val) + ',' + DFS(node.left) + DFS(node.right)
+            return DFS(root)[:-1]
+        
+        # DFS through the comma-separated string (using iter) to reconstruct the tree
+        def deserialize(self, data):
+            def DFS(nodes):
+                val = next(nodes)
+                if val == 'null': return None
+                node = TreeNode(int(val))
+                node.left = DFS(nodes)
+                node.right = DFS(nodes)
+                return node
+            return DFS(iter(data.split(',')))
