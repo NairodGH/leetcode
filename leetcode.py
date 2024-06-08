@@ -782,3 +782,36 @@ class Solution(object):
                 node.right = DFS(nodes)
                 return node
             return DFS(iter(data.split(',')))
+    
+    # https://leetcode.com/problems/implement-trie-prefix-tree/
+    class Trie:
+        # create the root of the Trie being a dictionnary that'll hold the different nested characters pathes that represent the words ending with a delimiter
+        def __init__(self):
+            self.root = {}
+
+        # for each character in the word, add a dictionnary if it doesnt already exist and nest in it until reaching the end to add the delimiter
+        def insert(self, word: str) -> None:
+            node = self.root
+            for char in word:
+                if char not in node:
+                    node[char] = {}
+                node = node[char]
+            node['\0'] = True
+
+        # search each character of the word, if any doesnt exist return false, if we went through all and found the delimiter then return true
+        def search(self, word: str) -> bool:
+            node = self.root
+            for char in word:
+                if char not in node:
+                    return False
+                node = node[char]
+            return '\0' in node
+
+        # same as search but returns true instantly instead of checking for the delimiter (ex: search(a) with a->b->\0 is false but startsWith would be true)
+        def startsWith(self, prefix: str) -> bool:
+            node = self.root
+            for char in prefix:
+                if char not in node:
+                    return False
+                node = node[char]
+            return True
