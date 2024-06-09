@@ -815,3 +815,27 @@ class Solution(object):
                     return False
                 node = node[char]
             return True
+    # https://leetcode.com/problems/design-add-and-search-words-data-structure/
+    class WordDictionary:
+        # same as Trie class
+        def __init__(self):
+            self.root = {}
+
+        # same as Trie class
+        def addWord(self, word: str) -> None:
+            node = self.root
+            for char in word:
+                if char not in node:
+                    node[char] = {}
+                node = node[char]
+            node['\0'] = True
+
+        # '.' wildcards make it different from Trie class' search as we need to DFS through each possibility on the remainder of the word but the rest is the same
+        def search(self, word: str) -> bool:
+            def DFS(word, node):
+                for i, char in enumerate(word):
+                    if char == '.': return any(DFS(word[i+1:], node[child]) for child in node if child != '\0')
+                    if char not in node: return False
+                    node = node[char]
+                return '\0' in node
+            return DFS(word, self.root)
