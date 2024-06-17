@@ -782,7 +782,9 @@ class Solution(object):
                 node.right = DFS(nodes)
                 return node
             return DFS(iter(data.split(',')))
-    
+
+    # Tries
+
     # https://leetcode.com/problems/implement-trie-prefix-tree/
     class Trie:
         # create the root of the Trie being a dictionnary that'll hold the different nested characters pathes that represent the words ending with a delimiter
@@ -839,3 +841,26 @@ class Solution(object):
                     node = node[char]
                 return '\0' in node
             return DFS(word, self.root)
+    # https://leetcode.com/problems/word-search-ii/
+    def findWords(self, board: List[List[str]], words: List[str]) -> List[str]:
+        # build a Trie out of words then DFS through each in the board by going in all 4 directions, mark visited cells and once found add words to the set
+        trie = self.Trie()
+        for word in words: trie.insert(word)
+        result = set()
+        def DFS(node, i, j, path):
+            char = board[i][j]
+            node = node[char]
+            if '\0' in node:
+                result.add(path + char)
+                del node['\0'] # avoid further exploration since the word is already found
+            board[i][j] = '#' # mark as visited, no word can have '#' so it'll just stop the dfs
+            for x, y in [(0, 1), (1, 0), (0, -1), (-1, 0)]: # go in all 4 directions
+                ni, nj = i + x, j + y
+                if 0 <= ni < m and 0 <= nj < n and board[ni][nj] in node: DFS(node, ni, nj, path + char) # if within bounds & valid char, DFS in that direction
+            board[i][j] = char  # unmark as visited
+        m, n = len(board), len(board[0])
+        for i in range(m):
+            for j in range(n):
+                if board[i][j] in trie.root: # only start DFS from possible word pathes
+                    DFS(trie.root, i, j, "")
+        return list(result)
