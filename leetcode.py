@@ -864,3 +864,15 @@ class Solution(object):
                 if board[i][j] in trie.root: # only start DFS from possible word pathes
                     DFS(trie.root, i, j, "")
         return list(result)
+
+    # Backtracking
+
+    # https://leetcode.com/problems/subsets/
+    def subsets(self, nums: List[int]) -> List[List[int]]:
+        # add each of the nums to each of the pathes' copies (0:[] 1:[],[1] 2:[],[2],[1],[1, 2] 3:...)
+        def backtrack(start, path):
+            res.append(path)
+            for i in range(start, len(nums)): backtrack(i + 1, path + [nums[i]])
+        res = []
+        backtrack(0, [])
+        return res
