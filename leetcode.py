@@ -876,3 +876,15 @@ class Solution(object):
         res = []
         backtrack(0, [])
         return res
+    # https://leetcode.com/problems/combination-sum/
+    def combinationSum(self, candidates: List[int], target: int) -> List[List[int]]:
+        # store each of the candidates in pathes until target reached (save path) or passed (backtrack), passing i allows for numbers to be reused
+        def backtrack(remaining, path, start):
+            if remaining == 0:
+                result.append(path)
+                return
+            if remaining < 0: return
+            for i in range(start, len(candidates)): backtrack(remaining - candidates[i], path + [candidates[i]], i)
+        result = []
+        backtrack(target, [], 0)
+        return result
