@@ -888,3 +888,15 @@ class Solution(object):
         result = []
         backtrack(target, [], 0)
         return result
+    # https://leetcode.com/problems/permutations/
+    def permute(self, nums: List[int]) -> List[List[int]]:
+        # go through each num's pathes (with nums except the current one) while storing until we reached a path of nums length (valid permutation)
+        def backtrack(path, options):
+            if len(path) == len(nums):
+                result.append(path)
+                return
+            for i in range(len(options)):
+                backtrack(path + [options[i]], options[:i] + options[i+1:])
+        result = []
+        backtrack([], nums)
+        return result
