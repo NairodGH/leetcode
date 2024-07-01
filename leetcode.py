@@ -869,7 +869,7 @@ class Solution(object):
 
     # https://leetcode.com/problems/subsets/
     def subsets(self, nums: List[int]) -> List[List[int]]:
-        # add each of the nums to each of the pathes' copies (0:[] 1:[],[1] 2:[],[2],[1],[1, 2] 3:...)
+        # sort then backtrack by adding each of the nums to each of the pathes' copies (0:[] 1:[],[1] 2:[],[2],[1],[1, 2] 3:...)
         def backtrack(start, path):
             res.append(path)
             for i in range(start, len(nums)): backtrack(i + 1, path + [nums[i]])
@@ -895,8 +895,20 @@ class Solution(object):
             if len(path) == len(nums):
                 result.append(path)
                 return
-            for i in range(len(options)):
-                backtrack(path + [options[i]], options[:i] + options[i+1:])
+            for i in range(len(options)): backtrack(path + [options[i]], options[:i] + options[i+1:])
         result = []
         backtrack([], nums)
         return result
+    # https://leetcode.com/problems/subsets-ii/
+    def subsetsWithDup(self, nums: List[int]) -> List[List[int]]:
+        # same as subsets() but with an extra check for the current number to be different than the previous one to avoid duplicates
+        def backtrack(start, path):
+            res.append(path)
+            for i in range(start, len(nums)):
+                if i > start and nums[i] == nums[i - 1]:
+                    continue
+                backtrack(i + 1, path + [nums[i]])
+        nums.sort()
+        res = []
+        backtrack(0, [])
+        return res
