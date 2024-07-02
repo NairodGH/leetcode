@@ -884,7 +884,10 @@ class Solution(object):
                 result.append(path)
                 return
             if remaining < 0: return
-            for i in range(start, len(candidates)): backtrack(remaining - candidates[i], path + [candidates[i]], i)
+            for i in range(start, len(candidates)):
+                if candidates[i] > remaining: break
+                backtrack(remaining - candidates[i], path + [candidates[i]], i)
+        candidates.sort()
         result = []
         backtrack(target, [], 0)
         return result
@@ -912,3 +915,17 @@ class Solution(object):
         res = []
         backtrack(0, [])
         return res
+    def combinationSum2(self, candidates: List[int], target: int) -> List[List[int]]:
+        # same as combinationSum() but with an extra check for the current number to be different than the previous one to avoid duplicates
+        def backtrack(remaining, path, start):
+            if remaining == 0:
+                result.append(list(path))
+                return
+            for i in range(start, len(candidates)):
+                if i > start and candidates[i] == candidates[i - 1]: continue
+                if candidates[i] > remaining: break
+                backtrack(remaining - candidates[i], path + [candidates[i]], i + 1)
+        candidates.sort()
+        result = []
+        backtrack(target, [], 0)
+        return result
