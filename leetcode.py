@@ -1,6 +1,7 @@
 from typing import List, Optional
 from math import ceil
 from collections import deque, OrderedDict
+from heapq import heapify, heappop, heappush
 
 class ListNode:
     def __init__(self, val=0, next=None):
@@ -997,3 +998,19 @@ class Solution(object):
         board = [['.'] * n for _ in range(n)]
         backtrack(0)
         return result
+    
+    # Heap / Priority Queue
+
+    # https://leetcode.com/problems/kth-largest-element-in-a-stream/
+    class KthLargest:
+        # init the heap with test scores (nums) and get k
+        def __init__(self, k: int, nums: List[int]):
+            self.heap = nums
+            heapify(self.heap)
+            self.k = k
+        # push val in heap, shrink the heap to the largest k elements, return its first/smallest element (therefore the k-th largest)
+        def add(self, val: int) -> int:
+            heappush(self.heap, val)
+            while len(self.heap) > self.k:
+                heappop(self.heap)
+            return self.heap[0]
