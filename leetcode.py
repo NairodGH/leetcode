@@ -1014,3 +1014,13 @@ class Solution(object):
             while len(self.heap) > self.k:
                 heappop(self.heap)
             return self.heap[0]
+    # https://leetcode.com/problems/last-stone-weight/
+    def lastStoneWeight(self, stones: list[int]) -> int:
+        # use a max-heap (reversed min-heap) to get the biggest weights and substract them if not equal until we reach last stone or none left
+        while len(stones) > 1:
+            stones.sort(reverse=True)
+            first = stones.pop(0)
+            second = stones.pop(0)
+            if first != second:
+                stones.append(first - second)
+        return stones[0] if stones else 0
