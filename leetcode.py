@@ -1016,7 +1016,7 @@ class Solution(object):
             return self.heap[0]
     # https://leetcode.com/problems/last-stone-weight/
     def lastStoneWeight(self, stones: list[int]) -> int:
-        # use a max-heap (reversed min-heap) to get the biggest weights and substract them if not equal until we reach last stone or none left
+        # use a max-heap (negative/reversed min-heap) to get the biggest weights and substract them if not equal until we reach last stone or none left
         while len(stones) > 1:
             stones.sort(reverse=True)
             first = stones.pop(0)
@@ -1024,3 +1024,13 @@ class Solution(object):
             if first != second:
                 stones.append(first - second)
         return stones[0] if stones else 0
+    # https://leetcode.com/problems/k-closest-points-to-origin/
+    def kClosest(self, points: List[List[int]], k: int) -> List[List[int]]:
+        # push each point and its distance to origin in a k size max-heap
+        max_heap = []
+        for (x, y) in points:
+            dist = -(x * x + y * y)
+            heappush(max_heap, (dist, [x, y]))
+            if len(max_heap) > k:
+                heappop(max_heap)
+        return [point for (_, point) in max_heap]
