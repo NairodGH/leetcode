@@ -1,7 +1,7 @@
 from typing import List, Optional
 from math import ceil
 from collections import deque, OrderedDict
-from heapq import heapify, heappop, heappush
+from heapq import heapify, heappop, heappush, heapreplace
 
 class ListNode:
     def __init__(self, val=0, next=None):
@@ -1034,3 +1034,12 @@ class Solution(object):
             if len(max_heap) > k:
                 heappop(max_heap)
         return [point for (_, point) in max_heap]
+    # https://leetcode.com/problems/kth-largest-element-in-an-array/
+    def findKthLargest(self, nums: List[int], k: int) -> int:
+        # start a k first nums heap, replace its 1rst for each of the remaining nums if larger so that min_heap[0] is always the k-th largest overall
+        min_heap = nums[:k]
+        heapify(min_heap)
+        for num in nums[k:]:
+            if num > min_heap[0]:
+                heapreplace(min_heap, num)
+        return min_heap[0]
