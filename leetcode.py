@@ -1,6 +1,6 @@
 from typing import List, Optional
 from math import ceil
-from collections import deque, OrderedDict
+from collections import deque, OrderedDict, Counter
 from heapq import heapify, heappop, heappush, heapreplace
 
 class ListNode:
@@ -1043,3 +1043,19 @@ class Solution(object):
             if num > min_heap[0]:
                 heapreplace(min_heap, num)
         return min_heap[0]
+    def leastInterval(self, tasks: list[str], n: int) -> int:
+        # max-heap tasks frequencies and use a cooldowns queue to minimize idle time
+        task_counts = Counter(tasks)
+        max_heap = [-count for count in task_counts.values()]
+        heapify(max_heap)
+        cooldown_queue = deque()
+        time = 0
+        while max_heap or cooldown_queue:
+            time += 1
+            if max_heap:
+                freq = heappop(max_heap)
+                if freq + 1 < 0:
+                    cooldown_queue.append((freq + 1, time + n))
+            if cooldown_queue and cooldown_queue[0][1] == time:
+                heappush(max_heap, cooldown_queue.popleft()[0])
+        return time
