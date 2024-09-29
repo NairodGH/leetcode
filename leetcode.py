@@ -1,6 +1,6 @@
 from typing import List, Optional
 from math import ceil
-from collections import deque, OrderedDict, Counter
+from collections import deque, OrderedDict, Counter, defaultdict
 from heapq import heapify, heappop, heappush, heapreplace
 
 class ListNode:
@@ -969,8 +969,7 @@ class Solution(object):
             if index == len(digits):
                 combinations.append(path)
                 return
-            for letter in phone_map[digits[index]]:
-                backtrack(index + 1, path + letter)
+            for letter in phone_map[digits[index]]: backtrack(index + 1, path + letter)
         combinations = []
         backtrack(0, "")
         return combinations
@@ -982,8 +981,7 @@ class Solution(object):
                 result.append(["".join(board[r]) for r in range(n)])
                 return
             for col in range(n):
-                if col in cols or (row - col) in diag1 or (row + col) in diag2:
-                    continue
+                if col in cols or (row - col) in diag1 or (row + col) in diag2: continue
                 cols.add(col)
                 diag1.add(row - col)
                 diag2.add(row + col)
@@ -1021,8 +1019,7 @@ class Solution(object):
             stones.sort(reverse=True)
             first = stones.pop(0)
             second = stones.pop(0)
-            if first != second:
-                stones.append(first - second)
+            if first != second: stones.append(first - second)
         return stones[0] if stones else 0
     # https://leetcode.com/problems/k-closest-points-to-origin/
     def kClosest(self, points: List[List[int]], k: int) -> List[List[int]]:
@@ -1031,8 +1028,7 @@ class Solution(object):
         for (x, y) in points:
             dist = -(x * x + y * y)
             heappush(max_heap, (dist, [x, y]))
-            if len(max_heap) > k:
-                heappop(max_heap)
+            if len(max_heap) > k: heappop(max_heap)
         return [point for (_, point) in max_heap]
     # https://leetcode.com/problems/kth-largest-element-in-an-array/
     def findKthLargest(self, nums: List[int], k: int) -> int:
@@ -1043,6 +1039,7 @@ class Solution(object):
             if num > min_heap[0]:
                 heapreplace(min_heap, num)
         return min_heap[0]
+    # https://leetcode.com/problems/task-scheduler/
     def leastInterval(self, tasks: list[str], n: int) -> int:
         # max-heap tasks frequencies and use a cooldowns queue to minimize idle time
         task_counts = Counter(tasks)
@@ -1054,8 +1051,42 @@ class Solution(object):
             time += 1
             if max_heap:
                 freq = heappop(max_heap)
-                if freq + 1 < 0:
-                    cooldown_queue.append((freq + 1, time + n))
-            if cooldown_queue and cooldown_queue[0][1] == time:
-                heappush(max_heap, cooldown_queue.popleft()[0])
+                if freq + 1 < 0: cooldown_queue.append((freq + 1, time + n))
+            if cooldown_queue and cooldown_queue[0][1] == time: heappush(max_heap, cooldown_queue.popleft()[0])
         return time
+    # https://leetcode.com/problems/design-twitter/
+    class Twitter:
+        # tweets (userId -> deque of (timestamp, tweetId)), followings (userId -> set of followeeIds) and global timestamp to keep track of tweet order
+        def __init__(self):
+            self.tweets = defaultdict(deque)
+            self.following = defaultdict(set)
+            self.timestamp = 0
+
+        # add the tweet to the user's tweet list with current timestamp and increment the global timestamp for the next tweet
+        def postTweet(self, userId: int, tweetId: int) -> None:
+            self.tweets[userId].appendleft((self.timestamp, tweetId))
+            self.timestamp += 1
+
+        # gets the user's then their followings' tweets into a max-heap up to 10 then reverse for desc time order
+        def getNewsFeed(self, userId: int) -> list[int]:
+            max_heap = []
+            if userId in self.tweets:
+                for tweet in self.tweets[userId]:
+                    heappush(max_heap, (-tweet[0], tweet[1]))
+                    if len(max_heap) > 10: heappop(max_heap)
+            for followeeId in self.following[userId]:
+                if followeeId in self.tweets:
+                    for tweet in self.tweets[followeeId]:
+                        heappush(max_heap, (-tweet[0], tweet[1]))
+                        if len(max_heap) > 10: heappop(max_heap)
+            result = []
+            while max_heap: result.append(heappop(max_heap)[1])
+            return result[::-1]
+
+        # add followeeId to followerId's followings if it's not themselves
+        def follow(self, followerId: int, followeeId: int) -> None:
+            if followerId != followeeId: self.following[followerId].add(followeeId)
+
+        # If the follower is following the followee, remove the followee
+        def unfollow(self, followerId: int, followeeId: int) -> None:
+            if followeeId in self.following[followerId]: self.following[followerId].remove(followeeId)
