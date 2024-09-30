@@ -1090,3 +1090,26 @@ class Solution(object):
         # If the follower is following the followee, remove the followee
         def unfollow(self, followerId: int, followeeId: int) -> None:
             if followeeId in self.following[followerId]: self.following[followerId].remove(followeeId)
+    # https://leetcode.com/problems/find-median-from-data-stream/
+    class MedianFinder:
+        # init max-heap for the lower half and min-heap for the upper half
+        def __init__(self):
+            self.low = []
+            self.high = []
+
+        # add the num to the appropriate heap (low but high if too large) then balance the heap sizes (low has always either has many nums or 1 more than high)
+        def addNum(self, num: int) -> None:
+            heappush(self.low, -num)
+            if self.low and self.high and (-self.low[0] > self.high[0]):
+                heappush(self.high, -heappop(self.low))
+            if len(self.low) > len(self.high) + 1:
+                heappush(self.high, -heappop(self.low))
+            if len(self.high) > len(self.low):
+                heappush(self.low, -heappop(self.high))
+
+        # classic median but with the low/high heaps system where their 1rst elements are therefore the middle of a merge
+        def findMedian(self) -> float:
+            if len(self.low) == len(self.high):
+                return (-self.low[0] + self.high[0]) / 2
+            else:
+                return -self.low[0]
