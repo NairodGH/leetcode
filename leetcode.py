@@ -1113,3 +1113,24 @@ class Solution(object):
                 return (-self.low[0] + self.high[0]) / 2
             else:
                 return -self.low[0]
+    
+    # Graphs
+
+    # https://leetcode.com/problems/number-of-islands/
+    def numIslands(self, grid: List[List[str]]) -> int:
+        # traverse the grid, each time DFS exploring an entire island and removing it while incrementing of the count
+        if not grid: return 0
+        def DFS(i, j):
+            if i < 0 or i >= len(grid) or j < 0 or j >= len(grid[0]) or grid[i][j] == '0': return
+            grid[i][j] = '0'
+            DFS(i - 1, j)
+            DFS(i + 1, j)
+            DFS(i, j - 1)
+            DFS(i, j + 1)
+        island_count = 0
+        for i in range(len(grid)):
+            for j in range(len(grid[0])):
+                if grid[i][j] == '1':
+                    island_count += 1
+                    DFS(i, j)
+        return island_count
