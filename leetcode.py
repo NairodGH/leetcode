@@ -1148,3 +1148,15 @@ class Solution(object):
                 if grid[i][j] == 1:
                     max_area = max(max_area, DFS(i, j))
         return max_area
+    # https://leetcode.com/problems/clone-graph/
+    def cloneGraph(self, node: Optional['Node']) -> Optional['Node']:
+        # DFS from the given node and its neighbors recursively until we've clone each
+        if not node: return None
+        cloned_nodes = {}
+        def DFS(node: 'Node') -> 'Node':
+            if node in cloned_nodes: return cloned_nodes[node]
+            clone = Node(node.val)
+            cloned_nodes[node] = clone
+            for neighbor in node.neighbors: clone.neighbors.append(DFS(neighbor))
+            return clone
+        return DFS(node)
