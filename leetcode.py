@@ -1160,3 +1160,22 @@ class Solution(object):
             for neighbor in node.neighbors: clone.neighbors.append(DFS(neighbor))
             return clone
         return DFS(node)
+    # https://leetcode.com/problems/walls-and-gates/
+    def islandsAndTreasure(self, grid: List[List[int]]) -> None:
+        # queue treasure chest positions then BFS all 4 directions from each while updating the valid next positions' distances and adding them to the queue
+        if not grid or not grid[0]: return
+        row_count, col_count = len(grid), len(grid[0])
+        INF = 2147483647
+        directions = [(0, 1), (0, -1), (1, 0), (-1, 0)]
+        queue = deque()
+        for row in range(row_count):
+            for col in range(col_count):
+                if grid[row][col] == 0:
+                    queue.append((row, col))
+        while queue:
+            current_row, current_col = queue.popleft()
+            for row_offset, col_offset in directions:
+                next_row, next_col = current_row + row_offset, current_col + col_offset
+                if 0 <= next_row < row_count and 0 <= next_col < col_count and grid[next_row][next_col] == INF:
+                    grid[next_row][next_col] = grid[current_row][current_col] + 1
+                    queue.append((next_row, next_col))
