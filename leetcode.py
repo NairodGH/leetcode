@@ -1179,3 +1179,26 @@ class Solution(object):
                 if 0 <= next_row < row_count and 0 <= next_col < col_count and grid[next_row][next_col] == INF:
                     grid[next_row][next_col] = grid[current_row][current_col] + 1
                     queue.append((next_row, next_col))
+    # https://leetcode.com/problems/rotting-oranges/
+    def orangesRotting(self, grid: List[List[int]]) -> int:
+        # count freshes and queue rotten positions then BFS all 4 directions from each while rotting freshes and adding them to the queue with minute incrementation
+        directions = [(0, 1), (1, 0), (0, -1), (-1, 0)]
+        rows, cols = len(grid), len(grid[0])
+        queue = deque()
+        fresh_orange_count = 0
+        for row in range(rows):
+            for col in range(cols):
+                if grid[row][col] == 2:
+                    queue.append((row, col, 0))
+                elif grid[row][col] == 1:
+                    fresh_orange_count += 1
+        minutes_elapsed = 0
+        while queue:
+            row, col, minutes_elapsed = queue.popleft()
+            for d_row, d_col in directions:
+                adj_row, adj_col = row + d_row, col + d_col
+                if 0 <= adj_row < rows and 0 <= adj_col < cols and grid[adj_row][adj_col] == 1:
+                    grid[adj_row][adj_col] = 2
+                    fresh_orange_count -= 1
+                    queue.append((adj_row, adj_col, minutes_elapsed + 1))
+        return minutes_elapsed if fresh_orange_count == 0 else -1
