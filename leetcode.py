@@ -33,9 +33,11 @@ class Solution(object):
     # https://leetcode.com/problems/valid-anagram/
     def isAnagram(self, s: str, t: str) -> bool:
         # check if both strings have the same length and letter frequency with a set
-        if len(s) != len(t): return False
+        if len(s) != len(t):
+            return False
         for char in set(s):
-            if s.count(char) != t.count(char): return False
+            if s.count(char) != t.count(char):
+                return False
         return True
     # https://leetcode.com/problems/two-sum
     def twoSum(self, nums: List[int], target: int) -> List[int]:
@@ -48,8 +50,10 @@ class Solution(object):
         anagrams = {}
         for str in strs:
             sorted_str = ''.join(sorted(str))
-            if sorted_str in anagrams: anagrams[sorted_str].append(str)
-            else: anagrams[sorted_str] = [str]
+            if sorted_str in anagrams:
+                anagrams[sorted_str].append(str)
+            else:
+                anagrams[sorted_str] = [str]
         return list(anagrams.values())
     # https://leetcode.com/problems/top-k-frequent-elements/
     def topKFrequent(self, nums: List[int], k: int) -> List[int]:
@@ -76,10 +80,13 @@ class Solution(object):
         for i in range(9):
             k = (i // 3) * 3
             for j in range(9):
-                if board[i][j] == '.': continue
-                if board[i][j] in rows[i] or board[i][j] in lines[j]: return False
+                if board[i][j] == '.':
+                    continue
+                if board[i][j] in rows[i] or board[i][j] in lines[j]:
+                    return False
                 curr_k = k + (j // 3)
-                if board[i][j] in boxes[curr_k]: return False
+                if board[i][j] in boxes[curr_k]:
+                    return False
                 rows[i].append(board[i][j])
                 lines[j].append(board[i][j])
                 boxes[curr_k].append(board[i][j])
@@ -98,7 +105,8 @@ class Solution(object):
         for num in nums:
             if num - 1 not in nums:
                 current_num = num
-                while current_num + 1 in nums: current_num += 1
+                while current_num + 1 in nums:
+                    current_num += 1
                 longest_streak = max(longest_streak, current_num - num + 1)
         return longest_streak
     # https://leetcode.com/problems/valid-palindrome
@@ -115,26 +123,34 @@ class Solution(object):
         left, right = 0, len(numbers) - 1
         while left < right:
             sum = numbers[left] + numbers[right]
-            if sum == target: return [left + 1, right + 1]
-            elif sum < target: left += 1
-            else: right -= 1
+            if sum == target:
+                return [left + 1, right + 1]
+            elif sum < target:
+                left += 1
+            else:
+                right -= 1
     # https://leetcode.com/problems/3sum/
     def threeSum(self, nums: List[int]) -> List[List[int]]:
         # using a sort (for 2-pointer), replicate twoSum but with an extra fixed value and anti-duplicate checks
         nums.sort()
         result = []
         for i, num in enumerate(nums):
-            if i > 0 and num == nums[i-1]: continue
+            if i > 0 and num == nums[i-1]:
+                continue
             left, right = i + 1, len(nums) - 1
             while left < right:
                 sum = num + nums[left] + nums[right]
                 if sum == 0:
                     result.append([num, nums[left], nums[right]])
-                    while left < right and nums[left] == nums[left+1]: left += 1
-                    while left < right and nums[right] == nums[right-1]: right -= 1
+                    while left < right and nums[left] == nums[left+1]:
+                        left += 1
+                    while left < right and nums[right] == nums[right-1]:
+                        right -= 1
                     left, right = left + 1, right - 1
-                elif sum < 0: left += 1
-                else: right -= 1
+                elif sum < 0:
+                    left += 1
+                else:
+                    right -= 1
         return result
     # https://leetcode.com/problems/container-with-most-water/
     def maxArea(self, height: List[int]) -> int:
@@ -142,9 +158,12 @@ class Solution(object):
         left, right, best_area, max_height = 0, len(height) - 1, 0, max(height)
         while left < right:
             best_area = max(min(height[left], height[right]) * (right - left), best_area)
-            if height[left] < height[right]: left += 1
-            else: right -= 1
-            if best_area > max_height * (right - left): break
+            if height[left] < height[right]:
+                left += 1
+            else:
+                right -= 1
+            if best_area > max_height * (right - left):
+                break
         return best_area
     # https://leetcode.com/problems/trapping-rain-water/
     def trap(self, height: List[int]) -> int:
@@ -169,8 +188,10 @@ class Solution(object):
         # push opening brackets and pop closing ones if they match, the stack should then be empty at the end
         stack, correspondance = [], {'(': ')', '[': ']', '{': '}'}
         for char in s:
-            if char in correspondance: stack.append(char)
-            elif not len(stack) or char != correspondance[stack.pop()]: return False
+            if char in correspondance:
+                stack.append(char)
+            elif not len(stack) or char != correspondance[stack.pop()]:
+                return False
         return not len(stack)
     # https://leetcode.com/problems/min-stack/
     class MinStack:
@@ -183,12 +204,14 @@ class Solution(object):
         def push(self, val: int) -> None:
             # push val to stack, and to minimums stack if it's empty or a new minimum
             self.stack.append(val)
-            if not self.min_stack or val <= self.min_stack[-1]: self.min_stack.append(val)
+            if not self.min_stack or val <= self.min_stack[-1]:
+                self.min_stack.append(val)
         
         def pop(self) -> None:
             # pop val off stack, and off minimums stack if it's the minimum
             result = self.stack.pop()
-            if result == self.min_stack[-1]: self.min_stack.pop()
+            if result == self.min_stack[-1]:
+                self.min_stack.pop()
         
         def top(self) -> int:
             # peek the last stack value
@@ -204,12 +227,18 @@ class Solution(object):
         for token in tokens:
             if token in ["+", "-", "*", "/"]:
                 num2, num1 = stack.pop(), stack.pop()
-                if token == "+": stack.append(num1 + num2)
-                elif token == "-": stack.append(num1 - num2)
-                elif token == "*": stack.append(num1 * num2)
-                elif num1 * num2 >= 0: stack.append(num1 // num2)
-                else: stack.append(-(-num1 // num2))
-            else: stack.append(int(token))
+                if token == "+":
+                    stack.append(num1 + num2)
+                elif token == "-":
+                    stack.append(num1 - num2)
+                elif token == "*":
+                    stack.append(num1 * num2)
+                elif num1 * num2 >= 0:
+                    stack.append(num1 // num2)
+                else:
+                    stack.append(-(-num1 // num2))
+            else:
+                stack.append(int(token))
         return stack[0]
     # https://leetcode.com/problems/generate-parentheses/
     def generateParenthesis(self, n: int) -> List[str]:
@@ -217,10 +246,13 @@ class Solution(object):
         stack, result = [("(", 1, 0)], []
         while stack:
             s, open, close = stack.pop()
-            if open == close == n: result.append(s)
+            if open == close == n:
+                result.append(s)
             else:
-                if open < n: stack.append((s + "(", open + 1, close))
-                if close < open: stack.append((s + ")", open, close + 1))
+                if open < n:
+                    stack.append((s + "(", open + 1, close))
+                if close < open:
+                    stack.append((s + ")", open, close + 1))
         return result
     # https://leetcode.com/problems/daily-temperatures/
     def dailyTemperatures(self, temperatures: List[int]) -> List[int]:
@@ -238,8 +270,10 @@ class Solution(object):
         stack = []
         for pos, spd in sorted(zip(position, speed), reverse=True):
             time = (target - pos) / spd
-            if not stack: stack.append(time)
-            elif time > stack[-1]: stack.append(time)
+            if not stack:
+                stack.append(time)
+            elif time > stack[-1]:
+                stack.append(time)
         return len(stack)
     # https://leetcode.com/problems/largest-rectangle-in-histogram/
     def largestRectangleArea(self, heights: List[int]) -> int:
@@ -252,7 +286,8 @@ class Solution(object):
                 max_area = max(max_area, popped_height * (index - popped_index))
                 start = popped_index
             stack.append((start, height))
-        for index, height in stack: max_area = max(max_area, height * (len(heights) - index))
+        for index, height in stack:
+            max_area = max(max_area, height * (len(heights) - index))
         return max_area
     
     # Binary Search
@@ -263,9 +298,12 @@ class Solution(object):
         left, right = 0, len(nums) - 1
         while left <= right:
             mid = (left + right) // 2
-            if nums[mid] == target: return mid
-            if target < nums[mid]: right = mid - 1
-            elif target > nums[mid]: left = mid + 1
+            if nums[mid] == target:
+                return mid
+            if target < nums[mid]:
+                right = mid - 1
+            elif target > nums[mid]:
+                left = mid + 1
         return -1
     # https://leetcode.com/problems/search-a-2d-matrix/
     def searchMatrix(self, matrix: List[List[int]], target: int) -> bool:
@@ -274,9 +312,12 @@ class Solution(object):
         left, right = 0, len(matrix) - 1
         while left <= right:
             mid = (left + right) // 2
-            if matrix[mid] == target: return True
-            if target < matrix[mid]: right = mid - 1
-            elif target > matrix[mid]: left = mid + 1
+            if matrix[mid] == target:
+                return True
+            if target < matrix[mid]:
+                right = mid - 1
+            elif target > matrix[mid]:
+                left = mid + 1
         return False
     # https://leetcode.com/problems/koko-eating-bananas/
     def minEatingSpeed(self, piles: List[int], h: int) -> int:
@@ -284,8 +325,10 @@ class Solution(object):
         left, right = 1, max(piles)
         while left != right:
             k = (left + right) // 2
-            if sum([ceil(pile / k) for pile in piles]) <= h: right = k
-            else: left = k + 1
+            if sum([ceil(pile / k) for pile in piles]) <= h:
+                right = k
+            else:
+                left = k + 1
         return left
     # https://leetcode.com/problems/find-minimum-in-rotated-sorted-array/
     def findMin(self, nums: List[int]) -> int:
@@ -293,8 +336,10 @@ class Solution(object):
         left, right = 0, len(nums) - 1
         while nums[right] < nums[left]:
             mid = (left + right) // 2
-            if nums[mid] < nums[right]: right = mid
-            else: left = mid + 1
+            if nums[mid] < nums[right]:
+                right = mid
+            else:
+                left = mid + 1
         return nums[left]
     # https://leetcode.com/problems/search-in-rotated-sorted-array/
     def search(self, nums: List[int], target: int) -> int:
@@ -302,15 +347,22 @@ class Solution(object):
         left, right = 0, len(nums) - 1
         while nums[right] < nums[left]:
             mid = (left + right) // 2
-            if nums[mid] < nums[right]: right = mid
-            else: left = mid + 1
-        if nums[left] <= target <= nums[-1]: right = len(nums) - 1
-        else: right, left = left, 0
+            if nums[mid] < nums[right]:
+                right = mid
+            else:
+                left = mid + 1
+        if nums[left] <= target <= nums[-1]:
+            right = len(nums) - 1
+        else:
+            right, left = left, 0
         while left <= right:
             mid = (left + right) // 2
-            if nums[mid] == target: return mid
-            if target < nums[mid]: right = mid - 1
-            elif target > nums[mid]: left = mid + 1
+            if nums[mid] == target:
+                return mid
+            if target < nums[mid]:
+                right = mid - 1
+            elif target > nums[mid]:
+                left = mid + 1
         return -1
     # https://leetcode.com/problems/time-based-key-value-store/
     class TimeMap:
@@ -321,7 +373,8 @@ class Solution(object):
 
         def set(self, key: str, value: str, timestamp: int) -> None:
             # add the (value, timestamp) tuple to time_map's corresponding key (init to empty array if it didnt exist)
-            if key not in self.time_map: self.time_map[key] = []
+            if key not in self.time_map:
+                self.time_map[key] = []
             self.time_map[key].append((value, timestamp))
 
         def get(self, key: str, timestamp: int) -> str:
@@ -330,14 +383,17 @@ class Solution(object):
                 left, right = 0, len(self.time_map[key]) - 1
                 while left < right:
                     mid = (left + right + 1) // 2
-                    if timestamp >= self.time_map[key][mid][1]: left = mid
-                    else: right = mid - 1
+                    if timestamp >= self.time_map[key][mid][1]:
+                        left = mid
+                    else:
+                        right = mid - 1
                 return self.time_map[key][left][0]
             return ""
     # https://leetcode.com/problems/median-of-two-sorted-arrays/
     def findMedianSortedArrays(self, nums1: List[int], nums2: List[int]) -> float:
         # find the points in each list where left numbers are smaller than right numbers then calculate median off of them
-        if len(nums1) > len(nums2): nums1, nums2 = nums2, nums1
+        if len(nums1) > len(nums2):
+            nums1, nums2 = nums2, nums1
         len1, len2 = len(nums1), len(nums2)
         left1, right1 = 0, len1
         while left1 <= right1:
@@ -348,10 +404,14 @@ class Solution(object):
             max_left_2 = float('-inf') if partition2 == 0 else nums2[partition2 - 1]
             min_right_2 = float('inf') if partition2 == len2 else nums2[partition2]
             if max_left_1 <= min_right_2 and max_left_2 <= min_right_1:
-                if (len1 + len2) % 2 == 0: return float(max(max_left_1, max_left_2) + min(min_right_1, min_right_2)) / 2
-                else: return max(max_left_1, max_left_2)
-            elif max_left_1 > min_right_2: right1 = partition1 - 1
-            else: left1 = partition1 + 1
+                if (len1 + len2) % 2 == 0:
+                    return float(max(max_left_1, max_left_2) + min(min_right_1, min_right_2)) / 2
+                else:
+                    return max(max_left_1, max_left_2)
+            elif max_left_1 > min_right_2:
+                right1 = partition1 - 1
+            else:
+                left1 = partition1 + 1
 
     # Sliding Window
 
@@ -360,8 +420,10 @@ class Solution(object):
         # record the max profit while searching for the minimum price
         min_price, max_profit = float('inf'), 0
         for price in prices:
-            if price < min_price: min_price = price
-            elif price - min_price > max_profit: max_profit = price - min_price
+            if price < min_price:
+                min_price = price
+            elif price - min_price > max_profit:
+                max_profit = price - min_price
         return max_profit
     # https://leetcode.com/problems/longest-substring-without-repeating-characters/
     def lengthOfLongestSubstring(self, s: str) -> int:
@@ -369,8 +431,10 @@ class Solution(object):
         char_map = {}
         max_len = start = 0
         for i, char in enumerate(s):
-            if char in char_map and start <= char_map[char]: start = char_map[char] + 1
-            else: max_len = max(max_len, i - start + 1)
+            if char in char_map and start <= char_map[char]:
+                start = char_map[char] + 1
+            else:
+                max_len = max(max_len, i - start + 1)
             char_map[char] = i
         return max_len
     # https://leetcode.com/problems/longest-repeating-character-replacement/
@@ -384,7 +448,8 @@ class Solution(object):
             if right - left + 1 > max_freq + k:
                 letters_freq[s[left]] -= 1
                 left += 1
-            else: result = max(result, right - left + 1)
+            else:
+                result = max(result, right - left + 1)
             right += 1
         return result
     # https://leetcode.com/problems/permutation-in-string/
@@ -392,32 +457,40 @@ class Solution(object):
         # move a s1-sized window over s2 while comparing letter frequencies until they match (True) or not (False)
         s1_freq = {}
         window_freq = {}
-        for char in s1: s1_freq[char] = s1_freq.get(char, 0) + 1
+        for char in s1:
+            s1_freq[char] = s1_freq.get(char, 0) + 1
         for i, char in enumerate(s2):
             window_freq[char] = window_freq.get(char, 0) + 1
             if i >= len(s1):
-                if window_freq[s2[i - len(s1)]] == 1: del window_freq[s2[i - len(s1)]]
-                else: window_freq[s2[i - len(s1)]] -= 1
-            if window_freq == s1_freq: return True
+                if window_freq[s2[i - len(s1)]] == 1:
+                    del window_freq[s2[i - len(s1)]]
+                else:
+                    window_freq[s2[i - len(s1)]] -= 1
+            if window_freq == s1_freq:
+                return True
         return False
     # https://leetcode.com/problems/minimum-window-substring/
     def minWindow(self, s: str, t: str) -> str:
         # move a left/right pointers window accross s while saving (min_start min_len) the smallest valid (t_counter) substring
-        if not s or not t or len(s) < len(t): return ""
+        if not s or not t or len(s) < len(t):
+            return ""
         letters_freq = [0] * 128
         t_counter = len(t)
         left = right = min_start = 0
         min_len = float('inf')
-        for char in t: letters_freq[ord(char)] += 1
+        for char in t:
+            letters_freq[ord(char)] += 1
         while right < len(s):
-            if letters_freq[ord(s[right])] > 0: t_counter -= 1
+            if letters_freq[ord(s[right])] > 0:
+                t_counter -= 1
             letters_freq[ord(s[right])] -= 1
             right += 1
             while t_counter == 0:
                 if right - left < min_len:
                     min_start = left
                     min_len = right - left
-                if letters_freq[ord(s[left])] == 0: t_counter += 1
+                if letters_freq[ord(s[left])] == 0:
+                    t_counter += 1
                 letters_freq[ord(s[left])] += 1
                 left += 1
         return "" if min_len == float('inf') else s[min_start:min_start + min_len]
@@ -427,11 +500,13 @@ class Solution(object):
         result = []
         window = deque()
         for i, num in enumerate(nums):
-            while window and num > nums[window[-1]]: window.pop()
+            while window and num > nums[window[-1]]:
+                window.pop()
             window.append(i)
             if i + 1 >= k:
                 result.append(nums[window[0]])
-                if i + 1 - k >= window[0]: window.popleft()
+                if i + 1 - k >= window[0]:
+                    window.popleft()
         return result
     
     # Linked List
@@ -464,7 +539,8 @@ class Solution(object):
     # https://leetcode.com/problems/reorder-list/
     def reorderList(self, head: Optional[ListNode]) -> None:
         # find the middle using slow-fast pointers, reverse the second half and merge both halves alternately
-        if not head or not head.next: return head
+        if not head or not head.next:
+            return head
         slow = fast = head
         while fast and fast.next:
             slow = slow.next
@@ -489,7 +565,8 @@ class Solution(object):
     def removeNthFromEnd(self, head: Optional[ListNode], n: int) -> Optional[ListNode]:
         # advance pointer A n times then A and B until A reaches the end so that B is nth from the end, remove node at B
         first = second = dummy = ListNode(next=head)
-        for _ in range(n + 1): first = first.next
+        for _ in range(n + 1):
+            first = first.next
         while first is not None:
             second = second.next
             first = first.next
@@ -498,7 +575,8 @@ class Solution(object):
     # https://leetcode.com/problems/copy-list-with-random-pointer/
     def copyRandomList(self, head: 'Optional[Node]') -> 'Optional[Node]':
         # create nodes copies without random pointers, set their next/random pointers and map them to the original ones
-        if not head: return None
+        if not head:
+            return None
         node_map = {}
         current = head
         while current:
@@ -506,8 +584,10 @@ class Solution(object):
             current = current.next
         current = head
         while current:
-            if current.next: node_map[current].next = node_map[current.next]
-            if current.random: node_map[current].random = node_map[current.random]
+            if current.next:
+                node_map[current].next = node_map[current.next]
+            if current.random:
+                node_map[current].random = node_map[current.random]
             current = current.next
         return node_map[head]
     # https://leetcode.com/problems/add-two-numbers/
@@ -529,11 +609,13 @@ class Solution(object):
     # https://leetcode.com/problems/linked-list-cycle/
     def hasCycle(self, head: Optional[ListNode]) -> bool:
         # move slow and fast pointers until fast reaches the end, if fast is ever back to slow then there's a cycle
-        if not head or not head.next: return False
+        if not head or not head.next:
+            return False
         slow = head
         fast = head.next
         while fast and fast.next:
-            if slow == fast: return True
+            if slow == fast:
+                return True
             slow = slow.next
             fast = fast.next.next
         return False
@@ -544,7 +626,8 @@ class Solution(object):
         while True:
             slow = nums[slow]
             fast = nums[nums[fast]]
-            if slow == fast: break
+            if slow == fast:
+                break
         slow = nums[0]
         while slow != fast:
             slow = nums[slow]
@@ -559,15 +642,18 @@ class Solution(object):
 
         # return the cache's key value if it exist while moving it to the end (most recent used key)
         def get(self, key: int) -> int:
-            if key not in self.cache: return -1
+            if key not in self.cache:
+                return -1
             self.cache.move_to_end(key)
             return self.cache[key]
 
         # change the cache's key value while moving it to then end, if the capacity is exceeded pop the first (LRU) key
         def put(self, key: int, value: int) -> None:
-            if key in self.cache: self.cache.move_to_end(key)
+            if key in self.cache:
+                self.cache.move_to_end(key)
             self.cache[key] = value
-            if len(self.cache) > self.capacity: self.cache.popitem(False)
+            if len(self.cache) > self.capacity:
+                self.cache.popitem(False)
     # https://leetcode.com/problems/merge-k-sorted-lists/
     def mergeKLists(self, lists: List[Optional[ListNode]]) -> Optional[ListNode]:
         # define a function to merge 2 lists and divide and conquer through lists with it by pushing results into mergedLists until it's 1D
@@ -625,21 +711,25 @@ class Solution(object):
     # https://leetcode.com/problems/maximum-depth-of-binary-tree/
     def maxDepth(self, root: Optional[TreeNode]) -> int:
         # use a deque to store root+depth tuples along the tree while increasing depths and storing the max
-        if not root: return 0
+        if not root:
+            return 0
         queue = deque([(root, 1)])
         max_depth = 0
         while queue:
             node, depth = queue.popleft()
             max_depth = max(max_depth, depth)
-            if node.left: queue.append((node.left, depth + 1))
-            if node.right: queue.append((node.right, depth + 1))
+            if node.left:
+                queue.append((node.left, depth + 1))
+            if node.right:
+                queue.append((node.right, depth + 1))
         return max_depth
     # https://leetcode.com/problems/diameter-of-binary-tree/
     def diameterOfBinaryTree(self, root: Optional[TreeNode]) -> int:
         # DFS through the tree while saving the max diameter from the recursive left+right diameters
         self.diameter = 0
         def DFS(node):
-            if not node: return 0
+            if not node:
+                return 0
             left_diameter = DFS(node.left)
             right_diameter = DFS(node.right)
             self.diameter = max(self.diameter, left_diameter + right_diameter)
@@ -650,42 +740,56 @@ class Solution(object):
     def isBalanced(self, root: Optional[TreeNode]) -> bool:
         # DFS through the tree by counting each level from the recursive max(left, right) + 1 until the difference is more than 1 (unbalanced) or not
         def DFS(node):
-            if not node: return 0
+            if not node:
+                return 0
             left, right = DFS(node.left), DFS(node.right)
-            if left == -1 or right == -1 or abs(left - right) > 1: return -1
+            if left == -1 or right == -1 or abs(left - right) > 1:
+                return -1
             return max(left, right) + 1
         return DFS(root) != -1
     # https://leetcode.com/problems/same-tree/
     def isSameTree(self, p: Optional[TreeNode], q: Optional[TreeNode]) -> bool:
         # recursively check left and right of both trees at the same time, stoping at any equality until we're sure both are the same
-        if not p and not q: return True
-        if not p or not q: return False
-        if p.val != q.val: return False
+        if not p and not q:
+            return True
+        if not p or not q:
+            return False
+        if p.val != q.val:
+            return False
         return self.isSameTree(p.left, q.left) and self.isSameTree(p.right, q.right)
     # https://neetcode.io/problems/subtree-of-a-binary-tree
     def isSubtree(self, root: Optional[TreeNode], subRoot: Optional[TreeNode]) -> bool:
         # recursively check if left or right are equal to the subRoot using isSameTree
-        if not root: return False
-        if self.isSameTree(root, subRoot): return True
+        if not root:
+            return False
+        if self.isSameTree(root, subRoot):
+            return True
         return self.isSubtree(root.left, subRoot) or self.isSubtree(root.right, subRoot)
     # https://leetcode.com/problems/lowest-common-ancestor-of-a-binary-search-tree/
     def lowestCommonAncestor(self, root: 'TreeNode', p: 'TreeNode', q: 'TreeNode') -> 'TreeNode':
         # use the BST property to find the LCA and return it
         current = root
         while current:
-            if p.val < current.val and q.val < current.val: current = current.left
-            elif p.val > current.val and q.val > current.val: current = current.right
-            else: return current
+            if p.val < current.val and q.val < current.val:
+                current = current.left
+            elif p.val > current.val and q.val > current.val:
+                current = current.right
+            else:
+                return current
     # https://leetcode.com/problems/binary-tree-level-order-traversal/
     def levelOrder(self, root: Optional[TreeNode]) -> List[List[int]]:
         # use a recursive support function to traverse the tree from root while recording values at their levels
-        if not root: return []
+        if not root:
+            return []
         result = []
         def traverse(node: TreeNode, level: int):
-            if len(result) == level: result.append([])
+            if len(result) == level:
+                result.append([])
             result[level].append(node.val)
-            if node.left: traverse(node.left, level + 1)
-            if node.right: traverse(node.right, level + 1)
+            if node.left:
+                traverse(node.left, level + 1)
+            if node.right:
+                traverse(node.right, level + 1)
         traverse(root, 0)
         return result
     # https://leetcode.com/problems/binary-tree-right-side-view/
@@ -693,8 +797,10 @@ class Solution(object):
         # DFS through the tree while getting values at their levels (right first for right side, leetcode trees design)
         result = []
         def DFS(node, level):
-            if not node: return
-            if level == len(result): result.append(node.val)
+            if not node:
+                return
+            if level == len(result):
+                result.append(node.val)
             DFS(node.right, level + 1)
             DFS(node.left, level + 1)
         DFS(root, 0)
@@ -702,10 +808,12 @@ class Solution(object):
     # https://leetcode.com/problems/count-good-nodes-in-binary-tree/
     def goodNodes(self, root: TreeNode) -> int:
         # DFS through the tree while adding to count (array alloc trick) whenever val is greater than the prev's (good node)
-        if not root: return 0
+        if not root:
+            return 0
         count = [0]
         def DFS(node, curMax):
-            if not node: return
+            if not node:
+                return
             if node.val >= curMax:
                 count[0] += 1
                 curMax = node.val
@@ -717,8 +825,10 @@ class Solution(object):
     def isValidBST(self, root: Optional[TreeNode]) -> bool:
         # recursively validate the tree's BST properties with a support function
         def validate(node, low=float('-inf'), high=float('inf')):
-            if not node: return True
-            if not low < node.val < high: return False
+            if not node:
+                return True
+            if not low < node.val < high:
+                return False
             return validate(node.left, low, node.val) and validate(node.right, node.val, high)
         return validate(root)
     # https://leetcode.com/problems/kth-smallest-element-in-a-bst/
@@ -727,7 +837,8 @@ class Solution(object):
         self.k = k
         self.result = None
         def sort(node):
-            if node is None: return
+            if node is None:
+                return
             sort(node.left)
             self.k -= 1
             if self.k == 0:
@@ -741,7 +852,8 @@ class Solution(object):
         # use an id hashmap of inorder to build the tree with a recursive helper func that determines the result off of in-order/pre-order traversal properties
         in_ids = {val: id for id, val in enumerate(inorder)}
         def helper(pre_left, pre_right, in_left, in_right):
-            if pre_left > pre_right: return None
+            if pre_left > pre_right:
+                return None
             root_val = preorder[pre_left]
             root = TreeNode(root_val)
             in_root_id = in_ids[root_val]
@@ -756,7 +868,8 @@ class Solution(object):
         max_sum = float('-inf')
         def DFS(node):
             nonlocal max_sum
-            if not node: return 0
+            if not node:
+                return 0
             left_gain = max(DFS(node.left), 0)
             right_gain = max(DFS(node.right), 0)
             price_newpath = node.val + left_gain + right_gain
@@ -769,7 +882,8 @@ class Solution(object):
         # DFS through root in pre-order to build the string representation of the tree with its comma-separated values
         def serialize(self, root):
             def DFS(node):
-                if not node: return 'null,'
+                if not node:
+                    return 'null,'
                 return str(node.val) + ',' + DFS(node.left) + DFS(node.right)
             return DFS(root)[:-1]
         
@@ -777,7 +891,8 @@ class Solution(object):
         def deserialize(self, data):
             def DFS(nodes):
                 val = next(nodes)
-                if val == 'null': return None
+                if val == 'null':
+                    return None
                 node = TreeNode(int(val))
                 node.left = DFS(nodes)
                 node.right = DFS(nodes)
@@ -837,8 +952,10 @@ class Solution(object):
         def search(self, word: str) -> bool:
             def DFS(word, node):
                 for i, char in enumerate(word):
-                    if char == '.': return any(DFS(word[i+1:], node[child]) for child in node if child != '\0')
-                    if char not in node: return False
+                    if char == '.':
+                        return any(DFS(word[i+1:], node[child]) for child in node if child != '\0')
+                    if char not in node:
+                        return False
                     node = node[char]
                 return '\0' in node
             return DFS(word, self.root)
@@ -846,7 +963,8 @@ class Solution(object):
     def findWords(self, board: List[List[str]], words: List[str]) -> List[str]:
         # build a Trie out of words then DFS through each in the board by going in all 4 directions, mark visited cells and once found add words to the set
         trie = self.Trie()
-        for word in words: trie.insert(word)
+        for word in words:
+            trie.insert(word)
         result = set()
         def DFS(node, i, j, path):
             char = board[i][j]
@@ -857,7 +975,8 @@ class Solution(object):
             board[i][j] = '#' # mark as visited, no word can have '#' so it'll just stop the dfs
             for x, y in [(0, 1), (1, 0), (0, -1), (-1, 0)]: # go in all 4 directions
                 ni, nj = i + x, j + y
-                if 0 <= ni < m and 0 <= nj < n and board[ni][nj] in node: DFS(node, ni, nj, path + char) # if within bounds & valid char, DFS in that direction
+                if 0 <= ni < m and 0 <= nj < n and board[ni][nj] in node:
+                    DFS(node, ni, nj, path + char) # if within bounds & valid char, DFS in that direction
             board[i][j] = char  # unmark as visited
         m, n = len(board), len(board[0])
         for i in range(m):
@@ -873,7 +992,8 @@ class Solution(object):
         # sort then backtrack by adding each of the nums to each of the pathes' copies (0:[] 1:[],[1] 2:[],[2],[1],[1, 2] 3:...)
         def backtrack(start, path):
             res.append(path)
-            for i in range(start, len(nums)): backtrack(i + 1, path + [nums[i]])
+            for i in range(start, len(nums)):
+                backtrack(i + 1, path + [nums[i]])
         res = []
         backtrack(0, [])
         return res
@@ -884,9 +1004,11 @@ class Solution(object):
             if remaining == 0:
                 result.append(path)
                 return
-            if remaining < 0: return
+            if remaining < 0:
+                return
             for i in range(start, len(candidates)):
-                if candidates[i] > remaining: break
+                if candidates[i] > remaining:
+                    break
                 backtrack(remaining - candidates[i], path + [candidates[i]], i)
         candidates.sort()
         result = []
@@ -899,7 +1021,8 @@ class Solution(object):
             if len(path) == len(nums):
                 result.append(path)
                 return
-            for i in range(len(options)): backtrack(path + [options[i]], options[:i] + options[i+1:])
+            for i in range(len(options)):
+                backtrack(path + [options[i]], options[:i] + options[i+1:])
         result = []
         backtrack([], nums)
         return result
@@ -924,8 +1047,10 @@ class Solution(object):
                 result.append(list(path))
                 return
             for i in range(start, len(candidates)):
-                if i > start and candidates[i] == candidates[i - 1]: continue
-                if candidates[i] > remaining: break
+                if i > start and candidates[i] == candidates[i - 1]:
+                    continue
+                if candidates[i] > remaining:
+                    break
                 backtrack(remaining - candidates[i], path + [candidates[i]], i + 1)
         candidates.sort()
         result = []
@@ -936,8 +1061,10 @@ class Solution(object):
         # backtrack off each board spot's 4 directions while marking visiteds until index is word length (found) or out of bounds/invalid letter (prune)
         rows, cols = len(board), len(board[0])
         def backtrack(row, col, index):
-            if index == len(word): return True
-            if row < 0 or row >= rows or col < 0 or col >= cols or board[row][col] != word[index]: return False
+            if index == len(word):
+                return True
+            if row < 0 or row >= rows or col < 0 or col >= cols or board[row][col] != word[index]:
+                return False
             board[row][col], temp = '#', board[row][col]
             found = (backtrack(row+1, col, index+1) or backtrack(row-1, col, index+1) or
                     backtrack(row, col+1, index+1) or backtrack(row, col-1, index+1))
@@ -960,7 +1087,8 @@ class Solution(object):
     # https://leetcode.com/problems/letter-combinations-of-a-phone-number/
     def letterCombinations(self, digits: str) -> List[str]:
         # backtrack for each of the phone letters mapping of each of the digits until we reached its end
-        if not digits: return []
+        if not digits:
+            return []
         phone_map = {
             "2": "abc", "3": "def", "4": "ghi", "5": "jkl", 
             "6": "mno", "7": "pqrs", "8": "tuv", "9": "wxyz"
@@ -969,7 +1097,8 @@ class Solution(object):
             if index == len(digits):
                 combinations.append(path)
                 return
-            for letter in phone_map[digits[index]]: backtrack(index + 1, path + letter)
+            for letter in phone_map[digits[index]]:
+                backtrack(index + 1, path + letter)
         combinations = []
         backtrack(0, "")
         return combinations
@@ -981,7 +1110,8 @@ class Solution(object):
                 result.append(["".join(board[r]) for r in range(n)])
                 return
             for col in range(n):
-                if col in cols or (row - col) in diag1 or (row + col) in diag2: continue
+                if col in cols or (row - col) in diag1 or (row + col) in diag2:
+                    continue
                 cols.add(col)
                 diag1.add(row - col)
                 diag2.add(row + col)
@@ -1019,7 +1149,8 @@ class Solution(object):
             stones.sort(reverse=True)
             first = stones.pop(0)
             second = stones.pop(0)
-            if first != second: stones.append(first - second)
+            if first != second:
+                stones.append(first - second)
         return stones[0] if stones else 0
     # https://leetcode.com/problems/k-closest-points-to-origin/
     def kClosest(self, points: List[List[int]], k: int) -> List[List[int]]:
@@ -1028,7 +1159,8 @@ class Solution(object):
         for (x, y) in points:
             dist = -(x * x + y * y)
             heappush(max_heap, (dist, [x, y]))
-            if len(max_heap) > k: heappop(max_heap)
+            if len(max_heap) > k:
+                heappop(max_heap)
         return [point for (_, point) in max_heap]
     # https://leetcode.com/problems/kth-largest-element-in-an-array/
     def findKthLargest(self, nums: List[int], k: int) -> int:
@@ -1051,8 +1183,10 @@ class Solution(object):
             time += 1
             if max_heap:
                 freq = heappop(max_heap)
-                if freq + 1 < 0: cooldown_queue.append((freq + 1, time + n))
-            if cooldown_queue and cooldown_queue[0][1] == time: heappush(max_heap, cooldown_queue.popleft()[0])
+                if freq + 1 < 0:
+                    cooldown_queue.append((freq + 1, time + n))
+            if cooldown_queue and cooldown_queue[0][1] == time:
+                heappush(max_heap, cooldown_queue.popleft()[0])
         return time
     # https://leetcode.com/problems/design-twitter/
     class Twitter:
@@ -1073,23 +1207,28 @@ class Solution(object):
             if userId in self.tweets:
                 for tweet in self.tweets[userId]:
                     heappush(max_heap, (-tweet[0], tweet[1]))
-                    if len(max_heap) > 10: heappop(max_heap)
+                    if len(max_heap) > 10:
+                        heappop(max_heap)
             for followeeId in self.following[userId]:
                 if followeeId in self.tweets:
                     for tweet in self.tweets[followeeId]:
                         heappush(max_heap, (-tweet[0], tweet[1]))
-                        if len(max_heap) > 10: heappop(max_heap)
+                        if len(max_heap) > 10:
+                            heappop(max_heap)
             result = []
-            while max_heap: result.append(heappop(max_heap)[1])
+            while max_heap:
+                result.append(heappop(max_heap)[1])
             return result[::-1]
 
         # add followeeId to followerId's followings if it's not themselves
         def follow(self, followerId: int, followeeId: int) -> None:
-            if followerId != followeeId: self.following[followerId].add(followeeId)
+            if followerId != followeeId:
+                self.following[followerId].add(followeeId)
 
         # If the follower is following the followee, remove the followee
         def unfollow(self, followerId: int, followeeId: int) -> None:
-            if followeeId in self.following[followerId]: self.following[followerId].remove(followeeId)
+            if followeeId in self.following[followerId]:
+                self.following[followerId].remove(followeeId)
     # https://leetcode.com/problems/find-median-from-data-stream/
     class MedianFinder:
         # init max-heap for the lower half and min-heap for the upper half
@@ -1119,9 +1258,11 @@ class Solution(object):
     # https://leetcode.com/problems/number-of-islands/
     def numIslands(self, grid: List[List[str]]) -> int:
         # traverse the grid, each time DFS exploring an entire island and removing it while incrementing of the count
-        if not grid: return 0
+        if not grid:
+            return 0
         def DFS(i, j):
-            if i < 0 or i >= len(grid) or j < 0 or j >= len(grid[0]) or grid[i][j] == '0': return
+            if i < 0 or i >= len(grid) or j < 0 or j >= len(grid[0]) or grid[i][j] == '0':
+                return
             grid[i][j] = '0'
             DFS(i - 1, j)
             DFS(i + 1, j)
@@ -1137,9 +1278,11 @@ class Solution(object):
     # https://leetcode.com/problems/max-area-of-island/
     def maxAreaOfIsland(self, grid: List[List[int]]) -> int:
         # like numIslands() but DFS returns 1 (current) + the area sum of all 4 directions and keep track of the max_area to return it
-        if not grid: return 0
+        if not grid:
+            return 0
         def DFS(i, j):
-            if i < 0 or i >= len(grid) or j < 0 or j >= len(grid[0]) or grid[i][j] == 0: return 0
+            if i < 0 or i >= len(grid) or j < 0 or j >= len(grid[0]) or grid[i][j] == 0:
+                return 0
             grid[i][j] = 0
             return 1 + DFS(i - 1, j) + DFS(i + 1, j) + DFS(i, j - 1) + DFS(i, j + 1)
         max_area = 0
@@ -1151,13 +1294,16 @@ class Solution(object):
     # https://leetcode.com/problems/clone-graph/
     def cloneGraph(self, node: Optional['Node']) -> Optional['Node']:
         # DFS from the given node and its neighbors recursively until we've clone each
-        if not node: return None
+        if not node:
+            return None
         cloned_nodes = {}
         def DFS(node: 'Node') -> 'Node':
-            if node in cloned_nodes: return cloned_nodes[node]
+            if node in cloned_nodes:
+                return cloned_nodes[node]
             clone = Node(node.val)
             cloned_nodes[node] = clone
-            for neighbor in node.neighbors: clone.neighbors.append(DFS(neighbor))
+            for neighbor in node.neighbors:
+                clone.neighbors.append(DFS(neighbor))
             return clone
         return DFS(node)
     # https://leetcode.com/problems/walls-and-gates/
@@ -1202,3 +1348,23 @@ class Solution(object):
                     fresh_orange_count -= 1
                     queue.append((adj_row, adj_col, minutes_elapsed + 1))
         return minutes_elapsed if fresh_orange_count == 0 else -1
+    # https://leetcode.com/problems/pacific-atlantic-water-flow/
+    def pacificAtlantic(self, heights: List[List[int]]) -> List[List[int]]:
+        # DFS from ocean bordering cells to adjacent higher grounds while saving positions for their respective ocean, result is positions that are in both
+        if not heights:
+            return []
+        rows, cols = len(heights), len(heights[0])
+        pacific_reachable, atlantic_reachable = set(), set()
+        def DFS(row, col, reachable_set, prev_height):
+            if (row, col) in reachable_set or row < 0 or row >= rows or col < 0 or col >= cols or heights[row][col] < prev_height:
+                return
+            reachable_set.add((row, col))
+            for delta_row, delta_col in [(1, 0), (-1, 0), (0, 1), (0, -1)]:
+                DFS(row + delta_row, col + delta_col, reachable_set, heights[row][col])
+        for row in range(rows):
+            DFS(row, 0, pacific_reachable, heights[row][0])
+            DFS(row, cols - 1, atlantic_reachable, heights[row][cols - 1])
+        for col in range(cols):
+            DFS(0, col, pacific_reachable, heights[0][col])
+            DFS(rows - 1, col, atlantic_reachable, heights[rows - 1][col])
+        return list(pacific_reachable & atlantic_reachable)
