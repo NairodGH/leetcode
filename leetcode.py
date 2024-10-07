@@ -1368,3 +1368,28 @@ class Solution(object):
             DFS(0, col, pacific_reachable, heights[0][col])
             DFS(rows - 1, col, atlantic_reachable, heights[rows - 1][col])
         return list(pacific_reachable & atlantic_reachable)
+    # https://leetcode.com/problems/surrounded-regions/
+    def solve(self, board: List[List[str]]) -> None:
+        # DFS from all border Os to adjacent Os while marking them B, the remaining Os become X as unconnected (also revert Bs to O for valid output)
+        if not board:
+            return
+        row_count, col_count = len(board), len(board[0])
+        def DFS(row, col):
+            if row < 0 or col < 0 or row >= row_count or col >= col_count or board[row][col] != 'O':
+                return
+            board[row][col] = 'B'
+            for next_row, next_col in [(row+1, col), (row-1, col), (row, col+1), (row, col-1)]:
+                DFS(next_row, next_col)
+        for row in range(row_count):
+            if board[row][0] == 'O':
+                DFS(row, 0)
+            if board[row][col_count-1] == 'O':
+                DFS(row, col_count-1)
+        for col in range(col_count):
+            if board[0][col] == 'O':
+                DFS(0, col)
+            if board[row_count-1][col] == 'O':
+                DFS(row_count-1, col)
+        for row in range(row_count):
+            for col in range(col_count):
+                board[row][col] = 'X' if board[row][col] == 'O' else ('O' if board[row][col] == 'B' else board[row][col])
