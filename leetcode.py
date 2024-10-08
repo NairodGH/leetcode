@@ -1393,3 +1393,25 @@ class Solution(object):
         for row in range(row_count):
             for col in range(col_count):
                 board[row][col] = 'X' if board[row][col] == 'O' else ('O' if board[row][col] == 'B' else board[row][col])
+    # https://leetcode.com/problems/course-schedule/
+    def canFinish(self, numCourses: int, prerequisites: List[List[int]]) -> bool:
+        # create adjacency and status lists (0,-1,1 = Unvisited,Visiting,Visited), DFS through each course and stop as soon as a cycle (already visiting) is detected
+        adj_list = [[] for _ in range(numCourses)]
+        for dest, src in prerequisites:
+            adj_list[src].append(dest)
+        status = [0] * numCourses
+        def DFS(course):
+            if status[course] == -1:
+                return False
+            if status[course] == 1:
+                return True
+            status[course] = -1
+            for neighbor in adj_list[course]:
+                if not DFS(neighbor):
+                    return False
+            status[course] = 1
+            return True
+        for course in range(numCourses):
+            if not DFS(course):
+                return False
+        return True
