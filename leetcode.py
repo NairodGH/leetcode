@@ -1415,3 +1415,28 @@ class Solution(object):
             if not DFS(course):
                 return False
         return True
+    # https://leetcode.com/problems/course-schedule-ii/
+    def findOrder(self, numCourses: int, prerequisites: List[List[int]]) -> List[int]:
+        # same as canFinish() but we save visited courses' orders (returned in reverse because of recursion)
+        adj_list = [[] for _ in range(numCourses)]
+        for dest, src in prerequisites:
+            adj_list[src].append(dest)
+        status = [0] * numCourses
+        course_order = []
+        def DFS(course):
+            if status[course] == -1:
+                return False
+            if status[course] == 1:
+                return True
+            status[course] = -1
+            for neighbor in adj_list[course]:
+                if not DFS(neighbor):
+                    return False
+            status[course] = 1
+            course_order.append(course)
+            return True
+        for course in range(numCourses):
+            if status[course] == 0:
+                if not DFS(course):
+                    return []
+        return course_order[::-1]
