@@ -1440,6 +1440,7 @@ class Solution(object):
                 if not DFS(course):
                     return []
         return course_order[::-1]
+    # https://leetcode.com/problems/valid-tree/
     def validTree(self, n: int, edges: List[List[int]]) -> bool:
         # create adjacency list, DFS from its node 0 while storing uniques, n unique nodes=valid graph (less=not connected, more=cycles, skip parents false cycles)
         if len(edges) != n - 1:
@@ -1462,3 +1463,22 @@ class Solution(object):
         if not DFS(0, -1):
             return False
         return len(visited) == n
+    # https://leetcode.com/problems/count-connected-components/
+    def countComponents(self, n: int, edges: List[List[int]]) -> int:
+        # create adjacency list, DFS from each of its non-visited nodes while incrementing the count and marking visiteds
+        adj_list = {i: [] for i in range(n)}
+        for a, b in edges:
+            adj_list[a].append(b)
+            adj_list[b].append(a)
+        def dfs(node):
+            visited.add(node)
+            for neighbor in adj_list[node]:
+                if neighbor not in visited:
+                    dfs(neighbor)
+        visited = set()
+        component_count = 0
+        for node in range(n):
+            if node not in visited:
+                dfs(node)
+                component_count += 1
+        return component_count
