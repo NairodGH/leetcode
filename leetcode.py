@@ -1440,3 +1440,25 @@ class Solution(object):
                 if not DFS(course):
                     return []
         return course_order[::-1]
+    def validTree(self, n: int, edges: List[List[int]]) -> bool:
+        # create adjacency list, DFS from its node 0 while storing uniques, n unique nodes=valid graph (less=not connected, more=cycles, skip parents false cycles)
+        if len(edges) != n - 1:
+            return False
+        adj_list = {i: [] for i in range(n)}
+        for u, v in edges:
+            adj_list[u].append(v)
+            adj_list[v].append(u)
+        visited = set()
+        def DFS(node, parent):
+            visited.add(node)
+            for neighbor in adj_list[node]:
+                if neighbor == parent:
+                    continue
+                if neighbor in visited:
+                    return False
+                if not DFS(neighbor, node):
+                    return False
+            return True
+        if not DFS(0, -1):
+            return False
+        return len(visited) == n
