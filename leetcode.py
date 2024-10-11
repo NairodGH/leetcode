@@ -1482,3 +1482,23 @@ class Solution(object):
                 dfs(node)
                 component_count += 1
         return component_count
+    # https://leetcode.com/problems/redundant-connection/
+    def findRedundantConnection(self, edges: List[List[int]]) -> List[int]:
+        # use a graph dict and visiteds set to DFS through each edge and check if it creates a cycle (already visited or same edge)
+        graph = defaultdict(list)
+        def DFS(node, target, visited):
+            if node == target:
+                return True
+            visited.add(node)
+            for neighbor in graph[node]:
+                if neighbor not in visited:
+                    if DFS(neighbor, target, visited):
+                        return True
+            return False
+        for u, v in edges:
+            visited = set()
+            if u in graph and v in graph and DFS(u, v, visited):
+                return [u, v]
+            graph[u].append(v)
+            graph[v].append(u)
+        return []
