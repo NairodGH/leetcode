@@ -1502,3 +1502,21 @@ class Solution(object):
             graph[u].append(v)
             graph[v].append(u)
         return []
+    # https://leetcode.com/problems/word-ladder/
+    def ladderLength(self, beginWord: str, endWord: str, wordList: List[str]) -> int:
+        # set for quick lookup, queue for words to explore+trans len, BFS queue by trying char swaps to get valid next words and find the shortest trans sequence
+        wordSet = set(wordList)
+        if endWord not in wordSet:
+            return 0
+        queue = deque([(beginWord, 1)])
+        while queue:
+            current_word, length = queue.popleft()
+            for i in range(len(current_word)):
+                for c in 'abcdefghijklmnopqrstuvwxyz':
+                    next_word = current_word[:i] + c + current_word[i+1:]
+                    if next_word == endWord:
+                        return length + 1
+                    if next_word in wordSet:
+                        queue.append((next_word, length + 1))
+                        wordSet.remove(next_word)
+        return 0
