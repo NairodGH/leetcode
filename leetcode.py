@@ -1520,3 +1520,20 @@ class Solution(object):
                         queue.append((next_word, length + 1))
                         wordSet.remove(next_word)
         return 0
+    
+    # 1-D Dynamic Programming
+
+    # https://leetcode.com/problems/climbing-stairs/
+    def climbStairs(self, n: int) -> int:
+        # number of ways to reach a step is the sum of the ways to reach the previous 2 steps so calculate the Fibonacci sequence from base case 3 to n
+        if n == 1:
+            return 1
+        elif n == 2:
+            return 2
+        first = 1
+        second = 2
+        for _ in range(3, n + 1):
+            third = first + second
+            first = second
+            second = third
+        return second
