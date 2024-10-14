@@ -1537,3 +1537,15 @@ class Solution(object):
             first = second
             second = third
         return second
+    # https://leetcode.com/problems/min-cost-climbing-stairs/
+    def minCostClimbingStairs(self, cost: List[int]) -> int:
+        # get each step's shortest path being its cost + the min of both previous ones, once done we get the min of the last or 2nd-last step
+        n = len(cost)
+        if n == 2:
+            return min(cost)
+        dp = [0] * n
+        dp[0] = cost[0]
+        dp[1] = cost[1]
+        for i in range(2, n):
+            dp[i] = cost[i] + min(dp[i - 1], dp[i - 2])
+        return min(dp[-1], dp[-2])
