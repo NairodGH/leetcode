@@ -1549,3 +1549,19 @@ class Solution(object):
         for i in range(2, n):
             dp[i] = cost[i] + min(dp[i - 1], dp[i - 2])
         return min(dp[-1], dp[-2])
+    # https://leetcode.com/problems/house-robber/
+    def rob(self, nums: List[int]) -> int:
+        # get each house's max amount being the max of the previous vs current + 2nd previous as adjacents are a no-go, last element is then total max amount
+        if not nums:
+            return 0
+        n = len(nums)
+        if n == 1:
+            return nums[0]
+        if n == 2:
+            return max(nums[0], nums[1])
+        dp = [0] * n
+        dp[0] = nums[0]
+        dp[1] = max(nums[0], nums[1])
+        for i in range(2, n):
+            dp[i] = max(dp[i - 1], nums[i] + dp[i - 2])
+        return dp[-1]
