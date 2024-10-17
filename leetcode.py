@@ -1585,3 +1585,24 @@ class Solution(object):
         if len(nums) == 2:
             return max(nums[0], nums[1])
         return max(basic_rob(nums[1:]), basic_rob(nums[:-1]))
+    # https://leetcode.com/problems/longest-palindromic-substring/
+    def longestPalindrome(self, s: str) -> str:
+        # search for each odd or even length palindrome's center accross s, when found and longest save its start and length for substring return
+        if s == s[::-1]:
+            return s
+        longest_start = 0
+        longest_size = 1
+        for center in range(1, len(s)):
+            left_bound_odd = center - longest_size - 1
+            left_bound_even = center - longest_size
+            right_bound = center + 1
+            odd_palindrome = s[left_bound_odd:right_bound]
+            if left_bound_odd >= 0 and odd_palindrome == odd_palindrome[::-1]:
+                longest_start = left_bound_odd
+                longest_size += 2
+            else:
+                even_palindrome = s[left_bound_even:right_bound]
+                if even_palindrome == even_palindrome[::-1]:
+                    longest_start = left_bound_even
+                    longest_size += 1
+        return s[longest_start: longest_start + longest_size]
