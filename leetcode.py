@@ -1606,3 +1606,22 @@ class Solution(object):
                     longest_start = left_bound_even
                     longest_size += 1
         return s[longest_start: longest_start + longest_size]
+    # https://leetcode.com/problems/palindromic-substrings/
+    def countSubstrings(self, s: str) -> int:
+        # advance palindrome center i through s, for each 1rst get same consecutive chars then different ones with left and right pointers, updated result is the count
+        result = 0
+        i = 0
+        while i < len(s):
+            consecutiveSameChars = 1
+            left = i - 1
+            while i < len(s) - 1 and s[i] == s[i + 1]:
+                i += 1
+                consecutiveSameChars += 1
+            result += consecutiveSameChars * (consecutiveSameChars + 1) // 2
+            right = i + 1
+            while left >= 0 and right < len(s) and s[left] == s[right]:
+                result += 1
+                left -= 1
+                right += 1
+            i += 1
+        return result
