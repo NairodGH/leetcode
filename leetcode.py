@@ -1639,3 +1639,12 @@ class Solution(object):
             if 10 <= int(s[i-2:i]) <= 26:
                 dp[i] += dp[i-2]
         return dp[n]
+    # https://leetcode.com/problems/coin-change/
+    def coinChange(self, coins: List[int], amount: int) -> int:
+        # update an amount-long array of infinites with the fewest coins needed for each, if amount's is still infinite then no solution
+        dp = [float('inf')] * (amount + 1)
+        dp[0] = 0
+        for coin in coins:
+            for i in range(coin, amount + 1):
+                dp[i] = min(dp[i], dp[i - coin] + 1)
+        return dp[amount] if dp[amount] != float('inf') else -1
