@@ -2,6 +2,7 @@ from typing import List, Optional
 from math import ceil
 from collections import deque, OrderedDict, Counter, defaultdict
 from heapq import heapify, heappop, heappush, heapreplace
+import bisect
 
 class ListNode:
     def __init__(self, val=0, next=None):
@@ -1676,3 +1677,14 @@ class Solution(object):
                     dp[i] = True
                     break
         return dp[len(s)]
+    # https://leetcode.com/problems/longest-increasing-subsequence/
+    def lengthOfLIS(self, nums: List[int]) -> int:
+        # build the LIS through nums, each should either replace LIS' head/tail using left binary search's index or just be appended, return LIS' len
+        sub = []
+        for num in nums:
+            i = bisect.bisect_left(sub, num)
+            if i < len(sub):
+                sub[i] = num 
+            else:
+                sub.append(num)
+        return len(sub)
