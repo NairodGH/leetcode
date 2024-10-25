@@ -1701,3 +1701,21 @@ class Solution(object):
             for i in range(target, num - 1, -1):
                 dp[i] = dp[i] or dp[i - num]
         return dp[target]
+    
+    # Intervals
+
+    # https://leetcode.com/problems/insert-interval/
+    def insert(self, intervals: List[List[int]], newInterval: List[int]) -> List[List[int]]:
+        # build a new intervals array by appending, in order, either current intervals or newIntervals if they dont overlap or a merge of both if they do
+        result = []
+        for interval in intervals:
+            if interval[1] < newInterval[0]:
+                result.append(interval)
+            elif interval[0] > newInterval[1]:
+                result.append(newInterval)
+                newInterval = interval
+            else:
+                newInterval[0] = min(newInterval[0], interval[0])
+                newInterval[1] = max(newInterval[1], interval[1])
+        result.append(newInterval)
+        return result
