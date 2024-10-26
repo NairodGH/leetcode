@@ -1719,3 +1719,14 @@ class Solution(object):
                 newInterval[1] = max(newInterval[1], interval[1])
         result.append(newInterval)
         return result
+    # https://leetcode.com/problems/merge-intervals/
+    def merge(self, intervals: List[List[int]]) -> List[List[int]]:
+        # sort intervals by start time, build a new intervals array by either appending if first/no overlap or merging by updating the end time
+        intervals.sort(key=lambda x: x[0])
+        merged = []
+        for interval in intervals:
+            if not merged or merged[-1][1] < interval[0]:
+                merged.append(interval)
+            else:
+                merged[-1][1] = max(merged[-1][1], interval[1])
+        return merged
