@@ -1730,3 +1730,15 @@ class Solution(object):
             else:
                 merged[-1][1] = max(merged[-1][1], interval[1])
         return merged
+    # https://leetcode.com/problems/non-overlapping-intervals/
+    def eraseOverlapIntervals(self, intervals: List[List[int]]) -> int:
+        # sort intervals by end to check overlaps with the latest valid interval by start while counting them
+        intervals.sort(key=lambda x: x[1])
+        end = intervals[0][1]
+        count = 0
+        for i in range(1, len(intervals)):
+            if intervals[i][0] < end:
+                count += 1
+            else:
+                end = intervals[i][1]
+        return count
