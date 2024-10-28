@@ -21,6 +21,11 @@ class TreeNode:
         self.left = left
         self.right = right
 
+class Interval(object):
+    def __init__(self, start, end):
+        self.start = start
+        self.end = end
+
 class Solution(object):
 
     # https://neetcode.io/roadmap
@@ -1742,3 +1747,11 @@ class Solution(object):
             else:
                 end = intervals[i][1]
         return count
+    # https://neetcode.io/problems/meeting-schedule/
+    def canAttendMeetings(self, intervals: List[Interval]) -> bool:
+        # sort intervals by start to check overlaps with ends and return false if so
+        intervals.sort(key=lambda x: x[0])
+        for i in range(1, len(intervals)):
+            if intervals[i][0] < intervals[i - 1][1]:
+                return False
+        return True
