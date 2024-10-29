@@ -2,7 +2,7 @@ from typing import List, Optional
 from math import ceil
 from collections import deque, OrderedDict, Counter, defaultdict
 from heapq import heapify, heappop, heappush, heapreplace
-import bisect
+from bisect import bisect_left
 
 class ListNode:
     def __init__(self, val=0, next=None):
@@ -1687,7 +1687,7 @@ class Solution(object):
         # build the LIS through nums, each should either replace LIS' head/tail using left binary search's index or just be appended, return LIS' len
         sub = []
         for num in nums:
-            i = bisect.bisect_left(sub, num)
+            i = bisect_left(sub, num)
             if i < len(sub):
                 sub[i] = num 
             else:
@@ -1755,3 +1755,13 @@ class Solution(object):
             if intervals[i][0] < intervals[i - 1][1]:
                 return False
         return True
+    # https://neetcode.io/problems/meeting-schedule-ii/
+    def minMeetingRooms(self, intervals: List[Interval]) -> int:
+        # sort intervals by start time to track overlaps with the updated earliest ending meeting in a min-heap, it contains min required days at the end
+        intervals.sort(key=lambda x: x.start)
+        min_heap = []
+        for interval in intervals:
+            if min_heap and min_heap[0] <= interval.start:
+                heappop(min_heap)
+            heappush(min_heap, interval.end)
+        return len(min_heap)
