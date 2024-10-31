@@ -1780,3 +1780,15 @@ class Solution(object):
                 heappop(minHeap)
             res[q] = minHeap[0][0] if minHeap else -1
         return [ res[q] for q in queries]
+    
+    # Greedy
+
+    # https://leetcode.com/problems/maximum-subarray/
+    def maxSubArray(self, nums: List[int]) -> int:
+        # iterate through nums while keeping track of the local subarray's sum and the maximum sum of any subarray which we'll return
+        max_sum = current_sum = nums[0]
+        for num in nums[1:]:
+            current_sum = max(num, current_sum + num)
+            if current_sum > max_sum:
+                max_sum = current_sum
+        return max_sum
