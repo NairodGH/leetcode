@@ -1765,3 +1765,18 @@ class Solution(object):
                 heappop(min_heap)
             heappush(min_heap, interval.end)
         return len(min_heap)
+    # https://leetcode.com/problems/minimum-interval-to-include-each-query/
+    def minInterval(self, intervals: List[List[int]], queries: List[int]) -> List[int]:
+        # sort intervals by start to track valid ones in a min-heap for each query, res then maps the shortest ones to a valid return
+        intervals.sort(key = lambda x: x[0])
+        minHeap = []
+        res = {}
+        i = 0
+        for q in sorted(queries):
+            while i < len(intervals) and intervals[i][0] <= q:
+                heappush(minHeap, (intervals[i][1] - intervals[i][0] + 1, intervals[i][1]))
+                i += 1
+            while minHeap and minHeap[0][1] < q:
+                heappop(minHeap)
+            res[q] = minHeap[0][0] if minHeap else -1
+        return [ res[q] for q in queries]
