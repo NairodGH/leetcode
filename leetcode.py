@@ -1792,3 +1792,13 @@ class Solution(object):
             if current_sum > max_sum:
                 max_sum = current_sum
         return max_sum
+    # https://leetcode.com/problems/jump-game/
+    def canJump(self, nums: List[int]) -> bool:
+        # iterate backward from 2nd-last num while updating the min required jumps to reach the end from each position, if still 0 at the end then it's possible
+        require = 0
+        for i in reversed(nums[:-1]):
+            if i > require:
+                require = 0
+            else:
+                require += 1
+        return not require
