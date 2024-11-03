@@ -1829,3 +1829,17 @@ class Solution(object):
                 total = 0
                 res = i + 1
         return res
+    # https://leetcode.com/problems/hand-of-straights/
+    def isNStraightHand(self, hand: List[int], groupSize: int) -> bool:
+        # if not divisible by groupsize then impossible, count cards frequencies and sort them to create groups for each, if not enough cards for any then impossible
+        if len(hand) % groupSize != 0:
+            return False
+        count = Counter(hand)
+        for card in sorted(count):
+            if count[card] > 0:
+                num_groups_needed = count[card]
+                for i in range(groupSize):
+                    if count[card + i] < num_groups_needed:
+                        return False
+                    count[card + i] -= num_groups_needed
+        return True
