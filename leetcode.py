@@ -1871,3 +1871,21 @@ class Solution(object):
                 partitions.append(end - start + 1)
                 start = i + 1
         return partitions
+    # https://leetcode.com/problems/valid-parenthesis-string/
+    def checkValidString(self, s: str) -> bool:
+        # track min and max number of unmatched left parentheses (low, high), if high ever negative then too many ')', if low 0 by the end then valid
+        low, high = 0, 0
+        for char in s:
+            if char == '(':
+                low += 1
+                high += 1
+            elif char == ')':
+                low -= 1
+                high -= 1
+            elif char == '*':
+                low -= 1
+                high += 1
+            if high < 0:
+                return False
+            low = max(low, 0)
+        return low == 0
