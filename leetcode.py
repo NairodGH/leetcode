@@ -1859,3 +1859,15 @@ class Solution(object):
             if found_x and found_y and found_z:
                 return True
         return False
+    # https://leetcode.com/problems/partition-labels/
+    def partitionLabels(self, s: str) -> List[int]:
+        # record occurence of last characters, for each char update partition end with larger occurence and when reached save the partition for the return
+        last_occurrence = {char: idx for idx, char in enumerate(s)}
+        partitions = []
+        start, end = 0, 0
+        for i, char in enumerate(s):
+            end = max(end, last_occurrence[char])
+            if i == end:
+                partitions.append(end - start + 1)
+                start = i + 1
+        return partitions
