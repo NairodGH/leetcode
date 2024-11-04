@@ -1889,3 +1889,21 @@ class Solution(object):
                 return False
             low = max(low, 0)
         return low == 0
+    
+    # Advanced Graphs
+
+    # https://leetcode.com/problems/reconstruct-itinerary/
+    def findItinerary(self, tickets: List[List[str]]) -> List[str]:
+        # lexically sort tickets and setup deque for efficient pops by DFSing through the graph to construct the itinerary from JFK, reverse return for correct order
+        graph = defaultdict(deque)
+        tickets.sort()
+        for f, t in tickets:
+            graph[f].append(t)
+        res = []
+        def dfs(start):
+            while graph[start]:
+                next_destination = graph[start].popleft()
+                dfs(next_destination)
+            res.append(start)
+        dfs('JFK')
+        return res[::-1]
