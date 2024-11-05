@@ -1897,8 +1897,8 @@ class Solution(object):
         # lexically sort tickets and setup deque for efficient pops by DFSing through the graph to construct the itinerary from JFK, reverse return for correct order
         graph = defaultdict(deque)
         tickets.sort()
-        for f, t in tickets:
-            graph[f].append(t)
+        for departure, arrival in tickets:
+            graph[departure].append(arrival)
         res = []
         def dfs(start):
             while graph[start]:
@@ -1907,3 +1907,23 @@ class Solution(object):
             res.append(start)
         dfs('JFK')
         return res[::-1]
+    # https://leetcode.com/problems/min-cost-to-connect-all-points/
+    def minCostConnectPoints(self, points: List[List[int]]) -> int:
+        # (dist,point) min-heap and visited points set to, for each point, get unvisited edges' dists after summing the nearest one into the returned minimum total
+        n = len(points)
+        if n == 1:
+            return 0
+        min_heap = [(0, 0)]
+        total_cost = 0
+        visited = set()
+        while len(visited) < n:
+            dist, point = heappop(min_heap)
+            if point in visited:
+                continue
+            total_cost += dist
+            visited.add(point)
+            for neighbor in range(n):
+                if neighbor not in visited:
+                    dist = abs(points[point][0] - points[neighbor][0]) + abs(points[point][1] - points[neighbor][1])
+                    heappush(min_heap, (dist, neighbor))
+        return total_cost
