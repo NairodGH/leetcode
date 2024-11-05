@@ -1927,3 +1927,25 @@ class Solution(object):
                     dist = abs(points[point][0] - points[neighbor][0]) + abs(points[point][1] - points[neighbor][1])
                     heappush(min_heap, (dist, neighbor))
         return total_cost
+    # https://leetcode.com/problems/network-delay-time/
+    def networkDelayTime(self, times: List[List[int]], n: int, k: int) -> int:
+        # Djikstra's with (weight, node) min-heap, unvisiteds set and inf-initialized weights, if there's still any by the end then impossible
+        edges = defaultdict(dict)
+        for source, dest, weight in times:
+            edges[source][dest] = weight
+        unvisited = set(range(1, n + 1))
+        weights = [float('inf')] * (n + 1)
+        weights[k] = 0
+        queue = [(0, k)]
+        while queue and unvisited:
+            cur_dist, node = heappop(queue)
+            if node not in unvisited:
+                continue
+            unvisited.remove(node)
+            for neighbor, travel_time in edges[node].items():
+                new_dist = cur_dist + travel_time
+                if new_dist < weights[neighbor]:
+                    weights[neighbor] = new_dist
+                    heappush(queue, (new_dist, neighbor))
+        max_distance = max(weights[1:])
+        return max_distance if max_distance < float('inf') else -1
