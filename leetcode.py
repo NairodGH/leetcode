@@ -1949,3 +1949,21 @@ class Solution(object):
                     heappush(queue, (new_dist, neighbor))
         max_distance = max(weights[1:])
         return max_distance if max_distance < float('inf') else -1
+    # https://leetcode.com/problems/swim-in-rising-water/
+    def swimInWater(self, grid: List[List[int]]) -> int:
+        # go from top left through each cell and its within-bounds unvisited neighbors while tracking the lowest's max time until we reach bottom right
+        n = len(grid)
+        min_heap = [(grid[0][0], 0, 0)]
+        visited = set((0, 0))
+        directions = [(0, 1), (1, 0), (0, -1), (-1, 0)]
+        max_time = 0
+        while min_heap:
+            time, x, y = heappop(min_heap)
+            max_time = max(max_time, time)
+            if (x, y) == (n - 1, n - 1):
+                return max_time
+            for dx, dy in directions:
+                new_x, new_y = x + dx, y + dy
+                if 0 <= new_x < n and 0 <= new_y < n and (new_x, new_y) not in visited:
+                    visited.add((new_x, new_y))
+                    heappush(min_heap, (grid[new_x][new_y], new_x, new_y))
