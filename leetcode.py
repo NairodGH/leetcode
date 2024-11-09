@@ -1967,3 +1967,29 @@ class Solution(object):
                 if 0 <= new_x < n and 0 <= new_y < n and (new_x, new_y) not in visited:
                     visited.add((new_x, new_y))
                     heappush(min_heap, (grid[new_x][new_y], new_x, new_y))
+    # https://leetcode.com/problems/foreign-dictionary/
+    def foreignDictionary(self, words: List[str]) -> str:
+        # build graph/in-degrees, for each word pair add first differing chars' edge, detect invalid prefix, topologically sort zero in-degree nodes, return order
+        graph = defaultdict(set)
+        in_degree = {c: 0 for word in words for c in word}
+        for i in range(len(words) - 1):
+            first, second = words[i], words[i + 1]
+            for c1, c2 in zip(first, second):
+                if c1 != c2:
+                    if c2 not in graph[c1]:
+                        graph[c1].add(c2)
+                        in_degree[c2] += 1
+                    break
+            else:
+                if len(second) < len(first):
+                    return ""
+        queue = deque([c for c in in_degree if in_degree[c] == 0])
+        order = []
+        while queue:
+            c = queue.popleft()
+            order.append(c)
+            for neighbor in graph[c]:
+                in_degree[neighbor] -= 1
+                if in_degree[neighbor] == 0:
+                    queue.append(neighbor)
+        return "".join(order) if len(order) == len(in_degree) else ""
