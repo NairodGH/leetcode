@@ -1971,7 +1971,7 @@ class Solution(object):
     def foreignDictionary(self, words: List[str]) -> str:
         # build graph/in-degrees, for each word pair add first differing chars' edge, detect invalid prefix, topologically sort zero in-degree nodes, return order
         graph = defaultdict(set)
-        in_degree = {c: 0 for word in words for c in word}
+        in_degree = {char: 0 for word in words for char in word}
         for i in range(len(words) - 1):
             first, second = words[i], words[i + 1]
             for c1, c2 in zip(first, second):
@@ -1983,13 +1983,31 @@ class Solution(object):
             else:
                 if len(second) < len(first):
                     return ""
-        queue = deque([c for c in in_degree if in_degree[c] == 0])
+        queue = deque([char for char in in_degree if in_degree[char] == 0])
         order = []
         while queue:
-            c = queue.popleft()
-            order.append(c)
-            for neighbor in graph[c]:
+            char = queue.popleft()
+            order.append(char)
+            for neighbor in graph[char]:
                 in_degree[neighbor] -= 1
                 if in_degree[neighbor] == 0:
                     queue.append(neighbor)
         return "".join(order) if len(order) == len(in_degree) else ""
+    # https://leetcode.com/problems/cheapest-flights-within-k-stops/
+    def findCheapestPrice(self, n: int, flights: List[List[int]], src: int, dst: int, k: int) -> int:
+        # go through each closest city's neighbors (cost, city, remaining stops min-heap) from src until we reach dest while tracking visited stops to be under k
+        graph = defaultdict(dict)
+        for start, destination, cost in flights:
+            graph[start][destination] = cost
+        min_heap = [(0, src, k+1)]
+        visited_stops = [0] * n
+        while min_heap:
+            current_cost, current_city, remaining_stops = heappop(min_heap)
+            if current_city == dst:
+                return current_cost
+            if visited_stops[current_city] >= remaining_stops:
+                continue
+            visited_stops[current_city] = remaining_stops
+            for neighbor_city, flight_cost in graph[current_city].items():
+                heappush(min_heap, (current_cost + flight_cost, neighbor_city, remaining_stops - 1))
+        return -1
