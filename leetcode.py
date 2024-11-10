@@ -1,5 +1,5 @@
 from typing import List, Optional
-from math import ceil
+from math import ceil, comb
 from collections import deque, OrderedDict, Counter, defaultdict
 from heapq import heapify, heappop, heappush, heapreplace
 from bisect import bisect_left
@@ -2011,3 +2011,10 @@ class Solution(object):
             for neighbor_city, flight_cost in graph[current_city].items():
                 heappush(min_heap, (current_cost + flight_cost, neighbor_city, remaining_stops - 1))
         return -1
+    
+    # 2-D Dynamic Programming
+
+    # https://leetcode.com/problems/unique-paths/
+    def uniquePaths(self, m: int, n: int) -> int:
+        # robot has to move (down m-1 & right n-1 times)=(m−1)+(n−1)=m+n−2, binomial coefficient with m-1 gives how many diff ways we can go down on total
+        return comb(m + n - 2, m - 1)
