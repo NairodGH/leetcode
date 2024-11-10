@@ -2018,3 +2018,14 @@ class Solution(object):
     def uniquePaths(self, m: int, n: int) -> int:
         # robot has to move (down m-1 & right n-1 times)=(m−1)+(n−1)=m+n−2, binomial coefficient with m-1 gives how many diff ways we can go down on total
         return comb(m + n - 2, m - 1)
+    # https://leetcode.com/problems/longest-common-subsequence/
+    def longestCommonSubsequence(self, text1: str, text2: str) -> int:
+        # fill a (len(text1)+1)*(len(text2)+1) matrix where dp[i][j]=LCS at text1[:i] and text2[:j] (either increment or max) until bottom right is the total LCS
+        dp = [[0] * (len(text2) + 1) for _ in range(len(text1) + 1)]
+        for i in range(1, len(text1) + 1):
+            for j in range(1, len(text2) + 1):
+                if text1[i - 1] == text2[j - 1]:
+                    dp[i][j] = dp[i - 1][j - 1] + 1
+                else:
+                    dp[i][j] = max(dp[i - 1][j], dp[i][j - 1])
+        return dp[len(text1)][len(text2)]
