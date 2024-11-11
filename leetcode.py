@@ -2029,3 +2029,18 @@ class Solution(object):
                 else:
                     dp[i][j] = max(dp[i - 1][j], dp[i][j - 1])
         return dp[len(text1)][len(text2)]
+    # https://leetcode.com/problems/best-time-to-buy-and-sell-stock-with-cooldown/
+    def maxProfit(self, prices: List[int]) -> int:
+        # init and build max profits for each day/action with their formula based on their previous day, result is max profit on last day without holding any stock
+        if not prices:
+            return 0
+        n = len(prices)
+        hold, sell, cooldown = [0] * n, [0] * n, [0] * n
+        hold[0] = -prices[0]
+        sell[0] = 0
+        cooldown[0] = 0
+        for i in range(1, n):
+            hold[i] = max(hold[i-1], cooldown[i-1] - prices[i])
+            sell[i] = hold[i-1] + prices[i]
+            cooldown[i] = max(cooldown[i-1], sell[i-1])
+        return max(sell[-1], cooldown[-1])
