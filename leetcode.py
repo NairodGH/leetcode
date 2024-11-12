@@ -2044,3 +2044,12 @@ class Solution(object):
             sell[i] = hold[i-1] + prices[i]
             cooldown[i] = max(cooldown[i-1], sell[i-1])
         return max(sell[-1], cooldown[-1])
+    # https://leetcode.com/problems/coin-change-ii/
+    def change(self, amount: int, coins: List[int]) -> int:
+        # fill array where dp[i]=number of ways to make amount i based on each coin
+        dp = [0] * (amount + 1)
+        dp[0] = 1
+        for coin in coins:
+            for i in range(coin, amount + 1):
+                dp[i] += dp[i - coin]
+        return dp[amount]
