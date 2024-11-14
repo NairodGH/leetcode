@@ -2053,3 +2053,16 @@ class Solution(object):
             for i in range(coin, amount + 1):
                 dp[i] += dp[i - coin]
         return dp[amount]
+    # https://leetcode.com/problems/target-sum/
+    def findTargetSumWays(self, nums: List[int], target: int) -> int:
+        # P sum of + nums, N sum of - nums, P−N=target and P+N=total_sum so P=(target+total_sum)/2 (target sum), dp[i]=ways to reach sum i so dp[P] is the answer
+        total_sum = sum(nums)
+        if (total_sum + target) % 2 != 0 or total_sum < abs(target):
+            return 0
+        P = (total_sum + target) // 2
+        dp = [0] * (P + 1)
+        dp[0] = 1
+        for num in nums:
+            for i in range(P, num - 1, -1):
+                dp[i] += dp[i - num]
+        return dp[P]
