@@ -2066,3 +2066,17 @@ class Solution(object):
             for i in range(P, num - 1, -1):
                 dp[i] += dp[i - num]
         return dp[P]
+    # https://leetcode.com/problems/interleaving-string/
+    def isInterleave(self, s1: str, s2: str, s3: str) -> bool:
+        # dp[j]=can s1[:i]&s2[:j] make s3[:i+j], check if s2 then s1 then both's chars can continue forming s3 until i+j-1 so that dp[len(s2)]=result
+        if len(s1) + len(s2) != len(s3):
+            return False
+        dp = [False] * (len(s2) + 1)
+        dp[0] = True
+        for j in range(1, len(s2) + 1):
+            dp[j] = dp[j - 1] and s2[j - 1] == s3[j - 1]
+        for i in range(1, len(s1) + 1):
+            dp[0] = dp[0] and s1[i - 1] == s3[i - 1]
+            for j in range(1, len(s2) + 1):
+                dp[j] = (dp[j] and s1[i - 1] == s3[i + j - 1]) or (dp[j - 1] and s2[j - 1] == s3[i + j - 1])
+        return dp[len(s2)]
