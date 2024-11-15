@@ -2080,3 +2080,19 @@ class Solution(object):
             for j in range(1, len(s2) + 1):
                 dp[j] = (dp[j] and s1[i - 1] == s3[i + j - 1]) or (dp[j - 1] and s2[j - 1] == s3[i + j - 1])
         return dp[len(s2)]
+    # https://leetcode.com/problems/longest-increasing-path-in-a-matrix/
+    def longestIncreasingPath(self, matrix: List[List[int]]) -> int:
+        # dp[i][j]=LIP from i/j, iterate value-sorted cells to check each in-bound direction if we can move to a smaller value, max dp is LIP
+        if not matrix:
+            return 0
+        rows, cols = len(matrix), len(matrix[0])
+        dp = [[1] * cols for _ in range(rows)]
+        cells = [(matrix[i][j], i, j) for i in range(rows) for j in range(cols)]
+        cells.sort()
+        directions = [(0, 1), (1, 0), (0, -1), (-1, 0)]
+        for value, i, j in cells:
+            for dx, dy in directions:
+                x, y = i + dx, j + dy
+                if 0 <= x < rows and 0 <= y < cols and matrix[x][y] < matrix[i][j]:
+                    dp[i][j] = max(dp[i][j], dp[x][y] + 1)
+        return max(max(row) for row in dp)
