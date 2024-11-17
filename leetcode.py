@@ -2096,3 +2096,17 @@ class Solution(object):
                 if 0 <= x < rows and 0 <= y < cols and matrix[x][y] < matrix[i][j]:
                     dp[i][j] = max(dp[i][j], dp[x][y] + 1)
         return max(max(row) for row in dp)
+    # https://leetcode.com/problems/distinct-subsequences/
+    def numDistinct(self, s: str, t: str) -> int:
+        # dp[i][j]=nb of s[:i] subsequences that equal t[:j], for each s/t prefixes update dp if char matches (match+ignore) or not (ignore), result is last
+        m, n = len(s), len(t)
+        dp = [[0] * (n + 1) for _ in range(m + 1)]
+        for i in range(m + 1):
+            dp[i][0] = 1
+        for i in range(1, m + 1):
+            for j in range(1, n + 1):
+                if s[i - 1] == t[j - 1]:
+                    dp[i][j] = dp[i - 1][j - 1] + dp[i - 1][j]
+                else:
+                    dp[i][j] = dp[i - 1][j]
+        return dp[m][n]
