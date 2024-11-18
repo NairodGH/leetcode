@@ -2130,3 +2130,18 @@ class Solution(object):
                         dp[i - 1][j - 1]  # Replace
                     ) + 1
         return dp[m][n]
+    # https://leetcode.com/problems/burst-balloons/
+    def maxCoins(self, nums: List[int]) -> int:
+        # dp[left][right]=max coins bursting in range [left, right], for each range get max coins of its last balloon, result is last (with edges' 1  paddings)
+        nums = [1] + nums + [1]
+        n = len(nums)
+        dp = [[0] * n for _ in range(n)]
+        for length in range(1, n - 1):
+            for left in range(1, n - length):
+                right = left + length - 1
+                for lastBurst in range(left, right + 1):
+                    dp[left][right] = max(
+                        dp[left][right],
+                        dp[left][lastBurst-1] + nums[left-1] * nums[lastBurst] * nums[right+1] + dp[lastBurst+1][right]
+                    )
+        return dp[1][n-2]
