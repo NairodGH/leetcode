@@ -2161,3 +2161,13 @@ class Solution(object):
                 elif p[j - 1] == '*':
                     dp[i][j] = dp[i][j - 2] or (dp[i - 1][j] and (p[j - 2] == '.' or p[j - 2] == s[i - 1]))
         return dp[m][n]
+
+    # Bit Manipulation
+
+    # https://leetcode.com/problems/single-number/
+    def singleNumber(self, nums: List[int]) -> int:
+        # any number XORed with itself is 0 and any number XORed with 0 remains unchanged so duplicates cancel each other out leaving the single num at the end
+        result = 0
+        for num in nums:
+            result ^= num
+        return result
