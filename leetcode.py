@@ -2179,3 +2179,10 @@ class Solution(object):
             count += n & 1
             n >>= 1
         return count
+    # https://leetcode.com/problems/counting-bits/
+    def countBits(self, n: int) -> List[int]:
+        # fill result dp array with dp[i>>1]=nb of 1s in i without LSB (i>>1 equivalent to i//2) + i&1=1 if the LSB of i is 1 (if even i//2 1s, if odd i//2+1 1s)
+        dp = [0] * (n + 1)
+        for i in range(1, n + 1):
+            dp[i] = dp[i >> 1] + (i & 1)
+        return dp
