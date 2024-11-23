@@ -2186,3 +2186,11 @@ class Solution(object):
         for i in range(1, n + 1):
             dp[i] = dp[i >> 1] + (i & 1)
         return dp
+    # https://leetcode.com/problems/reverse-bits/
+    def reverseBits(self, n: int) -> int:
+        # for each last bit, extract(AND)/place(OR) it at n's start by left-shifting it at its reversed spot before deleting its old last spot by right-shifting
+        result = 0
+        for i in range(32):
+            result |= (n & 1) << (31 - i)
+            n >>= 1
+        return result
