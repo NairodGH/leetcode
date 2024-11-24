@@ -2204,3 +2204,12 @@ class Solution(object):
         for num in nums:
             xor_nums ^= num
         return xor_all ^ xor_nums
+    # https://leetcode.com/problems/sum-of-two-integers/
+    def getSum(self, a: int, b: int) -> int:
+        # while b (carry, AND << 1) isn't done, add it to a (sum, XOR), while masking both to simulate 32-bit overflow, if result exceeds INT_MAX then negative overflow
+        while b != 0:
+            sum_without_carry = a ^ b
+            carry = (a & b) << 1
+            a = sum_without_carry & 0xFFFFFFFF
+            b = carry & 0xFFFFFFFF
+        return a if a <= 2147483647 else ~(a ^ 0xFFFFFFFF)
