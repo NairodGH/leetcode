@@ -2213,3 +2213,14 @@ class Solution(object):
             a = sum_without_carry & 0xFFFFFFFF
             b = carry & 0xFFFFFFFF
         return a if a <= 2147483647 else ~(a ^ 0xFFFFFFFF)
+    # https://leetcode.com/problems/reverse-integer/
+    def reverse(self, x: int) -> int:
+        # extract each absoluted x's last digit into result*10 (classic reversal) before giving back original sign and returning 0 if overflow, not bit manipulation.
+        result = 0
+        sign = -1 if x < 0 else 1
+        x = abs(x)
+        while x:
+            result = result * 10 + x % 10
+            x //= 10
+        result *= sign
+        return 0 if result > 2147483647 or result < -2147483648 else result
