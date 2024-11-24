@@ -2194,3 +2194,13 @@ class Solution(object):
             result |= (n & 1) << (31 - i)
             n >>= 1
         return result
+    # https://leetcode.com/problems/missing-number/
+    def missingNumber(self, nums: List[int]) -> int:
+        # get the XOR of nums with and without the missing number, given XOR's properties (see singleNumber()), the XOR of both is the missing number
+        xor_all = 0
+        xor_nums = 0
+        for i in range(len(nums) + 1):
+            xor_all ^= i
+        for num in nums:
+            xor_nums ^= num
+        return xor_all ^ xor_nums
