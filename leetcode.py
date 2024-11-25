@@ -2224,3 +2224,15 @@ class Solution(object):
             x //= 10
         result *= sign
         return 0 if result > 2147483647 or result < -2147483648 else result
+    
+    # Math & Geometry
+
+    # https://leetcode.com/problems/rotate-image/
+    def rotate(self, matrix: List[List[int]]) -> None:
+        # transpose (swap rows with columns) matrix then inverse its rows to rotate matrix by 90° clockwise
+        n = len(matrix)
+        for i in range(n):
+            for j in range(i + 1, n):
+                matrix[i][j], matrix[j][i] = matrix[j][i], matrix[i][j]
+        for row in matrix:
+            row.reverse()
