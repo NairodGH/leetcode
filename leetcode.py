@@ -2264,3 +2264,11 @@ class Solution(object):
         if first_col_zero:
             for i in range(rows):
                 matrix[i][0] = 0
+    # https://leetcode.com/problems/happy-number/
+    def isHappy(self, n: int) -> bool:
+        # simply replace the number by the sum of the squares of its digits while saving it in a set until it becomes 1 (true) or already appeared in the set (false)
+        seen = set()
+        while n != 1 and n not in seen:
+            seen.add(n)
+            n = sum(int(digit) ** 2 for digit in str(n))
+        return n == 1
