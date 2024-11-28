@@ -2272,3 +2272,12 @@ class Solution(object):
             seen.add(n)
             n = sum(int(digit) ** 2 for digit in str(n))
         return n == 1
+    # https://leetcode.com/problems/plus-one/
+    def plusOne(self, digits: List[int]) -> List[int]:
+        # for each digit starting from end, if under 9 increment and return digits, else it's 0 and continue (carry 1 to next), if all needed carry return with 1 prepend
+        for i in range(len(digits) - 1, -1, -1):
+            if digits[i] < 9:
+                digits[i] += 1
+                return digits
+            digits[i] = 0
+        return [1] + digits
