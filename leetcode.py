@@ -2311,3 +2311,19 @@ class Solution(object):
             strr = str(res % 10) + strr
             res //= 10
         return strr or "0"
+    # https://leetcode.com/problems/detect-squares/
+    class DetectSquares:
+        # point (x, y coordinates): frequency (how many times this exact point has been added, default 0) dictionary
+        def __init__(self):
+            self.point_counts = defaultdict(int)
+        # increase frequency of point (array to tuple because hashable for dictionary)
+        def add(self, point):
+            self.point_counts[tuple(point)] += 1
+        # check each stored point if same x&y dist (square) as query (+ diff coords), update square count based on 2 other points with same y as stored/x as query
+        def count(self, query_point):
+            qx, qy = query_point
+            square_count = 0
+            for (sx, sy), freq in self.point_counts.items():
+                if abs(sx - qx) == abs(sy - qy) and sx != qx and sy != qy:
+                    square_count += freq * self.point_counts.get((sx, qy), 0) * self.point_counts.get((qx, sy), 0)
+            return square_count
