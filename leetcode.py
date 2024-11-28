@@ -2215,7 +2215,7 @@ class Solution(object):
         return a if a <= 2147483647 else ~(a ^ 0xFFFFFFFF)
     # https://leetcode.com/problems/reverse-integer/
     def reverse(self, x: int) -> int:
-        # extract each absoluted x's last digit into result*10 (classic reversal) before giving back original sign and returning 0 if overflow, not bit manipulation.
+        # extract each absoluted x's last digit into result*10 (classic reversal) before giving back original sign and returning 0 if overflow, not bit manipulation
         result = 0
         sign = -1 if x < 0 else 1
         x = abs(x)
@@ -2236,3 +2236,11 @@ class Solution(object):
                 matrix[i][j], matrix[j][i] = matrix[j][i], matrix[i][j]
         for row in matrix:
             row.reverse()
+    # https://leetcode.com/problems/spiral-matrix/
+    def spiralOrder(self, matrix: List[List[int]]) -> List[int]:
+        # while matrix isnt empty, pop row then transpose (zip) the remaining matrix and reverse ([::-1]) it to simulate counter-clockwise rotation for spiral
+        result = []
+        while matrix:
+            result += matrix.pop(0)
+            matrix = list(zip(*matrix))[::-1]
+        return result
